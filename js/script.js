@@ -204,7 +204,7 @@ if (viewMoreBtn) {
     });
 }
 
-// Touch/Swipe support for mobile
+
 let touchStartX = 0;
 let touchEndX = 0;
 
@@ -222,16 +222,16 @@ carousel.addEventListener('touchend', (e) => {
 function handleSwipe() {
     const swipeThreshold = 50;
     if (touchEndX < touchStartX - swipeThreshold) {
-        // Swipe left - next slide
+       
         nextSlide();
     }
     if (touchEndX > touchStartX + swipeThreshold) {
-        // Swipe right - prev slide
+        
         prevSlide();
     }
 }
 
-// Form Submission Handler
+
 const quoteForm = document.getElementById('quoteForm');
 
 quoteForm.addEventListener('submit', (e) => {
