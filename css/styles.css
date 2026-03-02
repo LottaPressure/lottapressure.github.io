@@ -194,7 +194,7 @@ body {
     left: 0;
     width: 100%;
     height: 100%;
-    background-image: url('https://media.angi.com/s3fs-public/Before-after-driveway-cleaning_.jpg?impolicy=leadImage');
+    background-image: url('https://us1-photo.nextdoor.com/post_photos/6b/ae/6baebcf91d9ceca8a68f2886ea1f39d4');
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
@@ -407,6 +407,19 @@ body {
 .service-icon-large {
     font-size: 5rem;
     filter: grayscale(0%);
+    transition: all 0.3s ease;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.service-image {
+    width: 180px;
+    height: 180px;
+    border-radius: 50%;
+    object-fit: cover;
     transition: all 0.3s ease;
 }
 
