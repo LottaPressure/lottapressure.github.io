@@ -136,14 +136,14 @@ body {
     gap: 5px;
     cursor: pointer;
     padding: 12px;
-    background: linear-gradient(135deg, rgba(248, 113, 2, 0.1), rgba(2, 137, 248, 0.1));
+    background: rgba(248, 113, 2, 0.1);
     border: 2px solid var(--fire-dragon);
     border-radius: 8px;
     transition: all 0.3s ease;
 }
 
 .hamburger:hover {
-    background: linear-gradient(135deg, rgba(248, 113, 2, 0.2), rgba(2, 137, 248, 0.2));
+    background: rgba(248, 113, 2, 0.2);
     border-color: var(--too-blue);
     transform: scale(1.05);
 }
@@ -163,7 +163,7 @@ body {
 
 .hamburger.active {
     border-color: var(--too-blue);
-    background: linear-gradient(135deg, rgba(2, 137, 248, 0.2), rgba(248, 113, 2, 0.2));
+    background: rgba(2, 137, 248, 0.2);
 }
 
 .hamburger.active span {
@@ -304,7 +304,7 @@ body {
 /* Services Section */
 .services {
     padding: 6rem 0;
-    background: linear-gradient(to bottom, var(--white) 0%, var(--light-gray) 50%, var(--white) 100%);
+    background: var(--light-gray);
     position: relative;
 }
 
@@ -339,7 +339,7 @@ body {
     top: 0;
     bottom: 0;
     width: 3px;
-    background: linear-gradient(to bottom, var(--too-blue), var(--fire-dragon), var(--too-blue));
+    background: var(--too-blue);
     transform: translateX(-50%);
 }
 
@@ -519,6 +519,44 @@ body {
     background: var(--fire-dragon);
     color: var(--white);
     transform: translateY(-2px);
+}
+
+/* View More Services Button */
+.view-more-services {
+    display: none;
+    margin: 2rem auto;
+    padding: 1rem 2.5rem;
+    background: var(--fire-dragon);
+    color: var(--white);
+    border: none;
+    border-radius: 50px;
+    font-family: 'Poppins', sans-serif;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 5px 20px rgba(248, 113, 2, 0.3);
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.view-more-services:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 30px rgba(248, 113, 2, 0.4);
+}
+
+.view-more-services .button-icon {
+    display: inline-block;
+    transition: transform 0.3s ease;
+    margin-left: 0.5rem;
+}
+
+.view-more-services.expanded .button-icon {
+    transform: rotate(180deg);
+}
+
+.view-more-services.expanded .button-text::after {
+    content: ' Less';
 }
 
 /* Military Discount Section */
@@ -814,6 +852,39 @@ body {
     background: var(--too-blue);
     color: var(--white);
     position: relative;
+    overflow: hidden;
+}
+
+.contact::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-image: url('https://www.columbiamagazine.com/photos/79739.jpg');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    filter: blur(5px);
+    opacity: 0.8;
+    z-index: 0;
+}
+
+.contact::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(2, 137, 248, 0.274);
+    z-index: 1;
+}
+
+.contact .container {
+    position: relative;
+    z-index: 2;
 }
 
 .contact .section-title {
@@ -1139,6 +1210,19 @@ body {
     
     .service-features {
         justify-content: center;
+    }
+    
+    /* Mobile services dropdown */
+    .hidden-service {
+        display: none;
+    }
+    
+    .hidden-service.show {
+        display: flex;
+    }
+    
+    .view-more-services {
+        display: flex;
     }
     
     .feature-tag {

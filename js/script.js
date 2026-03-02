@@ -178,6 +178,32 @@ document.addEventListener('keydown', (e) => {
     }
 });
 
+// ===== View More Services Toggle =====
+const viewMoreBtn = document.getElementById('viewMoreServices');
+const hiddenServices = document.querySelectorAll('.hidden-service');
+
+if (viewMoreBtn) {
+    viewMoreBtn.addEventListener('click', () => {
+        const isExpanded = viewMoreBtn.classList.contains('expanded');
+        
+        if (isExpanded) {
+            // Collapse: hide services
+            hiddenServices.forEach(service => {
+                service.classList.remove('show');
+            });
+            viewMoreBtn.classList.remove('expanded');
+            viewMoreBtn.querySelector('.button-text').textContent = 'View More Services';
+        } else {
+            // Expand: show services
+            hiddenServices.forEach(service => {
+                service.classList.add('show');
+            });
+            viewMoreBtn.classList.add('expanded');
+            viewMoreBtn.querySelector('.button-text').textContent = 'View Less Services';
+        }
+    });
+}
+
 // Touch/Swipe support for mobile
 let touchStartX = 0;
 let touchEndX = 0;
