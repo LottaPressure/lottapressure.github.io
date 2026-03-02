@@ -1,0 +1,690 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes">
+    <meta name="description" content="Invoice Creator - Lawrenceburg Pressure Washing">
+    <meta name="theme-color" content="#f87102">
+    <link rel="icon" type="image/webp" href="images/logosquare.webp">
+    <title>Invoice Creator | Lawrenceburg Pressure Washing</title>
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <!-- PDF Generation Library -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <!-- Signature Pad Library -->
+    <script src="https://cdn.jsdelivr.net/npm/signature_pad@4.1.7/dist/signature_pad.umd.min.js"></script>
+    <style>
+        .invoice-container {
+            min-height: 100vh;
+            padding: 100px 20px 50px;
+            background: var(--light-gray);
+        }
+
+        .invoice-wrapper {
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        .page-header {
+            background: var(--white);
+            padding: 2rem;
+            border-radius: 15px 15px 0 0;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        .page-header h1 {
+            color: var(--dark-gray);
+            font-size: 2rem;
+            margin: 0;
+        }
+
+        .back-button {
+            padding: 10px 20px;
+            background: var(--text-gray);
+            color: var(--white);
+            text-decoration: none;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+            font-weight: 600;
+        }
+
+        .back-button:hover {
+            background: var(--dark-gray);
+            transform: translateY(-2px);
+        }
+
+        .invoice-form {
+            background: var(--white);
+            padding: 2rem;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .company-section {
+            background: var(--light-gray);
+            padding: 1.5rem;
+            border-radius: 10px;
+            margin-bottom: 2rem;
+        }
+
+        .company-section h2 {
+            color: var(--fire-dragon);
+            font-size: 1.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .company-info {
+            color: var(--text-gray);
+            line-height: 1.8;
+        }
+
+        .section-title {
+            font-size: 1.3rem;
+            color: var(--dark-gray);
+            margin: 2rem 0 1rem 0;
+            padding-bottom: 0.5rem;
+            border-bottom: 2px solid var(--fire-dragon);
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .form-group-full {
+            grid-column: 1 / -1;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .form-label {
+            font-weight: 600;
+            color: var(--dark-gray);
+            margin-bottom: 0.5rem;
+            font-size: 0.95rem;
+        }
+
+        .form-input,
+        .form-textarea,
+        .form-select {
+            padding: 12px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-family: 'Poppins', sans-serif;
+            transition: all 0.3s ease;
+        }
+
+        .form-input:focus,
+        .form-textarea:focus,
+        .form-select:focus {
+            outline: none;
+            border-color: var(--fire-dragon);
+            box-shadow: 0 0 0 3px rgba(248, 113, 2, 0.1);
+        }
+
+        .form-textarea {
+            resize: vertical;
+            min-height: 100px;
+        }
+
+        .signature-section {
+            margin-top: 2rem;
+            padding: 1.5rem;
+            background: var(--light-gray);
+            border-radius: 10px;
+        }
+
+        .signature-pad-container {
+            margin-top: 1rem;
+        }
+
+        .signature-canvas {
+            border: 2px solid var(--dark-gray);
+            border-radius: 8px;
+            cursor: crosshair;
+            background: white;
+            width: 100%;
+            max-width: 500px;
+            height: 200px;
+            touch-action: none;
+        }
+
+        .signature-buttons {
+            margin-top: 1rem;
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        .btn-clear {
+            background: #6c757d;
+            color: white;
+        }
+
+        .btn-clear:hover {
+            background: #5a6268;
+        }
+
+        .btn-generate {
+            background: var(--fire-dragon);
+            color: white;
+            padding: 15px 40px;
+            font-size: 1.1rem;
+        }
+
+        .btn-generate:hover {
+            background: var(--too-blue);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(248, 113, 2, 0.3);
+        }
+
+        .btn-generate:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .action-buttons {
+            margin-top: 2rem;
+            padding-top: 2rem;
+            border-top: 2px solid #e0e0e0;
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .invoice-preview {
+            background: var(--white);
+            padding: 2rem;
+            border-radius: 0 0 15px 15px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            margin-top: 2rem;
+            display: none;
+        }
+
+        .invoice-preview.show {
+            display: block;
+        }
+
+        .preview-title {
+            color: var(--fire-dragon);
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .required {
+            color: #dc3545;
+        }
+
+        @media (max-width: 768px) {
+            .invoice-container {
+                padding: 80px 15px 30px;
+            }
+
+            .page-header {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            .page-header h1 {
+                font-size: 1.5rem;
+            }
+
+            .form-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .signature-canvas {
+                max-width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation Bar -->
+    <nav class="navbar" id="navbar">
+        <div class="container">
+            <div class="nav-brand">
+                <a href="index.html">
+                    <img src="images/logosquare.webp" alt="Lotta Pressure Logo" class="logo-img">
+                </a>
+            </div>
+            <ul class="nav-menu">
+                <li><a href="index.html#home" class="nav-link">Home</a></li>
+                <li><a href="index.html#services" class="nav-link">Services</a></li>
+                <li><a href="index.html#discount" class="nav-link">Military Discount</a></li>
+                <li><a href="index.html#reviews" class="nav-link">Reviews</a></li>
+                <li><a href="index.html#contact" class="nav-link">Contact</a></li>
+            </ul>
+            <div class="hamburger">
+                <span></span>
+                <span></span>
+                <span></span>
+                <span></span>
+                <span></span>
+                <span></span>
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Invoice Creator -->
+    <div class="invoice-container">
+        <div class="invoice-wrapper">
+            <div class="page-header">
+                <h1>📄 Invoice Creator</h1>
+                <a href="employee-dashboard.html" class="back-button">← Back to Dashboard</a>
+            </div>
+
+            <div class="invoice-form">
+                <!-- Company Information (Pre-filled) -->
+                <div class="company-section">
+                    <h2>Lotta Pressure</h2>
+                    <div class="company-info">
+                        <p><strong>Lawrenceburgs #1 Most Trusted Professional Power Washing Service</strong></p>
+                        <p>Serving all of Lawrenceburg</p>
+                        <p>Phone: (000) 000-0000</p>
+                        <p>Email: example@example.com</p>
+                    </div>
+                </div>
+
+                <form id="invoiceForm">
+                    <!-- Invoice Details -->
+                    <h3 class="section-title">Invoice Details</h3>
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label class="form-label">Invoice Number <span class="required">*</span></label>
+                            <input type="text" id="invoiceNumber" class="form-input" required>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Date <span class="required">*</span></label>
+                            <input type="date" id="invoiceDate" class="form-input" required>
+                        </div>
+                    </div>
+
+                    <!-- Customer Information -->
+                    <h3 class="section-title">Customer Information</h3>
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label class="form-label">Customer Name <span class="required">*</span></label>
+                            <input type="text" id="customerName" class="form-input" placeholder="John Doe" required>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Phone Number</label>
+                            <input type="tel" id="customerPhone" class="form-input" placeholder="(123) 456-7890">
+                        </div>
+                        <div class="form-group form-group-full">
+                            <label class="form-label">Address <span class="required">*</span></label>
+                            <input type="text" id="customerAddress" class="form-input" placeholder="123 Main St, Lawrenceburg, IN 47025" required>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Email</label>
+                            <input type="email" id="customerEmail" class="form-input" placeholder="customer@email.com">
+                        </div>
+                    </div>
+
+                    <!-- Job Information -->
+                    <h3 class="section-title">Job Information</h3>
+                    <div class="form-grid">
+                        <div class="form-group form-group-full">
+                            <label class="form-label">Service Type <span class="required">*</span></label>
+                            <select id="serviceType" class="form-select" required>
+                                <option value="">Select a service...</option>
+                                <option value="House Washing">House Washing</option>
+                                <option value="Driveway & Walkway">Driveway & Walkway</option>
+                                <option value="Deck & Patio">Deck & Patio</option>
+                                <option value="Window Cleaning">Window Cleaning</option>
+                                <option value="Gutter Cleaning">Gutter Cleaning</option>
+                                <option value="Fence Restoration">Fence Restoration</option>
+                                <option value="Other">Other</option>
+                            </select>
+                        </div>
+                        <div class="form-group form-group-full">
+                            <label class="form-label">Job Description <span class="required">*</span></label>
+                            <textarea id="jobDescription" class="form-textarea" placeholder="Describe the work performed..." required></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Job Date</label>
+                            <input type="date" id="jobDate" class="form-input">
+                        </div>
+                    </div>
+
+                    <!-- Pricing -->
+                    <h3 class="section-title">Pricing</h3>
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label class="form-label">Amount <span class="required">*</span></label>
+                            <input type="number" id="amount" class="form-input" placeholder="0.00" step="0.01" min="0" required>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Discount (%)</label>
+                            <input type="number" id="discount" class="form-input" placeholder="0" step="1" min="0" max="100" value="0">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Total Amount</label>
+                            <input type="text" id="totalAmount" class="form-input" readonly style="background: #f0f0f0; font-weight: 600; font-size: 1.2rem;">
+                        </div>
+                    </div>
+
+                    <!-- Payment Information -->
+                    <h3 class="section-title">Payment Information</h3>
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label class="form-label">Payment Method</label>
+                            <select id="paymentMethod" class="form-select">
+                                <option value="Cash">Cash</option>
+                                <option value="Check">Check</option>
+                                <option value="Credit Card">Credit Card</option>
+                                <option value="Venmo">Venmo</option>
+                                <option value="PayPal">PayPal</option>
+                                <option value="Zelle">Zelle</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Payment Status</label>
+                            <select id="paymentStatus" class="form-select">
+                                <option value="Pending">Pending</option>
+                                <option value="Paid">Paid</option>
+                                <option value="Partial">Partial Payment</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <!-- Customer Signature -->
+                    <div class="signature-section">
+                        <h3 class="section-title" style="margin-top: 0;">Customer Signature</h3>
+                        <p style="color: var(--text-gray); margin-bottom: 1rem;">
+                            Customer, please sign below to acknowledge receipt of services:
+                        </p>
+                        <div class="signature-pad-container">
+                            <canvas id="signaturePad" class="signature-canvas"></canvas>
+                            <div class="signature-buttons">
+                                <button type="button" class="btn btn-clear" onclick="clearSignature()">Clear Signature</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Action Buttons -->
+                    <div class="action-buttons">
+                        <button type="submit" class="btn btn-generate">Generate Invoice PDF</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h3>Lotta Pressure</h3>
+                    <p>Your trusted partner for residential pressure washing services.</p>
+                </div>
+                <div class="footer-section">
+                    <h4>Quick Links</h4>
+                    <ul>
+                        <li><a href="index.html#home">Home</a></li>
+                        <li><a href="index.html#services">Services</a></li>
+                        <li><a href="index.html#reviews">Reviews</a></li>
+                        <li><a href="index.html#contact">Contact</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4>Services</h4>
+                    <ul>
+                        <li>House Washing</li>
+                        <li>Driveway Cleaning</li>
+                        <li>Deck Restoration</li>
+                        <li>Window Cleaning</li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4>Connect</h4>
+                    <div class="social-links">
+                        <a href="#" class="social-link">Facebook</a>
+                        <a href="#" class="social-link">Instagram</a>
+                    </div>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2026 Lotta Pressure. All rights reserved. | Licensed & Insured</p>
+                <a href="login.html" class="employee-login-btn">Employee Login</a>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Check if user is logged in
+        if (!sessionStorage.getItem('employeeLoggedIn')) {
+            window.location.href = 'login.html';
+        }
+
+        // Initialize signature pad
+        const canvas = document.getElementById('signaturePad');
+        const signaturePad = new SignaturePad(canvas, {
+            backgroundColor: 'rgb(255, 255, 255)',
+            penColor: 'rgb(0, 0, 0)'
+        });
+
+        // Resize canvas for proper display
+        function resizeCanvas() {
+            const ratio = Math.max(window.devicePixelRatio || 1, 1);
+            canvas.width = canvas.offsetWidth * ratio;
+            canvas.height = canvas.offsetHeight * ratio;
+            canvas.getContext('2d').scale(ratio, ratio);
+            signaturePad.clear();
+        }
+
+        window.addEventListener('resize', resizeCanvas);
+        resizeCanvas();
+
+        // Clear signature
+        function clearSignature() {
+            signaturePad.clear();
+        }
+
+        // Set default invoice number and date
+        document.getElementById('invoiceNumber').value = 'INV-' + Date.now().toString().slice(-8);
+        document.getElementById('invoiceDate').value = new Date().toISOString().split('T')[0];
+        document.getElementById('jobDate').value = new Date().toISOString().split('T')[0];
+
+        // Calculate total amount
+        function calculateTotal() {
+            const amount = parseFloat(document.getElementById('amount').value) || 0;
+            const discount = parseFloat(document.getElementById('discount').value) || 0;
+            const total = amount - (amount * discount / 100);
+            document.getElementById('totalAmount').value = '$' + total.toFixed(2);
+            return total;
+        }
+
+        document.getElementById('amount').addEventListener('input', calculateTotal);
+        document.getElementById('discount').addEventListener('input', calculateTotal);
+
+        // Generate PDF
+        document.getElementById('invoiceForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+
+            // Check if signature exists
+            if (signaturePad.isEmpty()) {
+                alert('Please provide a customer signature before generating the invoice.');
+                return;
+            }
+
+            // Get form values
+            const invoiceNumber = document.getElementById('invoiceNumber').value;
+            const invoiceDate = document.getElementById('invoiceDate').value;
+            const customerName = document.getElementById('customerName').value;
+            const customerPhone = document.getElementById('customerPhone').value;
+            const customerAddress = document.getElementById('customerAddress').value;
+            const customerEmail = document.getElementById('customerEmail').value;
+            const serviceType = document.getElementById('serviceType').value;
+            const jobDescription = document.getElementById('jobDescription').value;
+            const jobDate = document.getElementById('jobDate').value;
+            const amount = parseFloat(document.getElementById('amount').value);
+            const discount = parseFloat(document.getElementById('discount').value) || 0;
+            const total = calculateTotal();
+            const paymentMethod = document.getElementById('paymentMethod').value;
+            const paymentStatus = document.getElementById('paymentStatus').value;
+
+            // Get signature as image
+            const signatureImage = signaturePad.toDataURL();
+
+            // Create PDF
+            const { jsPDF } = window.jspdf;
+            const doc = new jsPDF();
+
+            // Company Header
+            doc.setFillColor(248, 113, 2); // Fire dragon color
+            doc.rect(0, 0, 210, 35, 'F');
+            
+            doc.setTextColor(255, 255, 255);
+            doc.setFontSize(24);
+            doc.setFont(undefined, 'bold');
+            doc.text('Lotta Pressure', 15, 15);
+            
+            doc.setFontSize(10);
+            doc.setFont(undefined, 'normal');
+            doc.text('Lawrenceburgs #1 Most Trusted Professional Power Washing Service', 15, 22);
+            doc.text('Serving all of Lawrenceburg', 15, 27);
+            doc.text('Phone: (000) 000-0000 | Email: example@example.com', 15, 32);
+
+            // Invoice Title
+            doc.setTextColor(51, 51, 51);
+            doc.setFontSize(18);
+            doc.setFont(undefined, 'bold');
+            doc.text('INVOICE', 160, 15);
+            
+            doc.setFontSize(10);
+            doc.setFont(undefined, 'normal');
+            doc.text(`Invoice #: ${invoiceNumber}`, 160, 22);
+            doc.text(`Date: ${new Date(invoiceDate).toLocaleDateString()}`, 160, 27);
+
+            // Customer Information
+            let yPos = 50;
+            doc.setFontSize(12);
+            doc.setFont(undefined, 'bold');
+            doc.text('Bill To:', 15, yPos);
+            
+            doc.setFontSize(10);
+            doc.setFont(undefined, 'normal');
+            doc.text(customerName, 15, yPos + 6);
+            doc.text(customerAddress, 15, yPos + 12);
+            if (customerPhone) doc.text(`Phone: ${customerPhone}`, 15, yPos + 18);
+            if (customerEmail) doc.text(`Email: ${customerEmail}`, 15, yPos + 24);
+
+            // Job Information
+            yPos = 85;
+            doc.setFontSize(12);
+            doc.setFont(undefined, 'bold');
+            doc.text('Service Details:', 15, yPos);
+            
+            doc.setFontSize(10);
+            doc.setFont(undefined, 'normal');
+            doc.text(`Service Type: ${serviceType}`, 15, yPos + 6);
+            if (jobDate) doc.text(`Job Date: ${new Date(jobDate).toLocaleDateString()}`, 15, yPos + 12);
+            
+            doc.text('Description:', 15, yPos + 20);
+            const splitDescription = doc.splitTextToSize(jobDescription, 180);
+            doc.text(splitDescription, 15, yPos + 26);
+
+            // Pricing Table
+            yPos = yPos + 26 + (splitDescription.length * 5) + 10;
+            
+            // Table header
+            doc.setFillColor(240, 240, 240);
+            doc.rect(15, yPos, 180, 8, 'F');
+            doc.setFont(undefined, 'bold');
+            doc.text('Description', 20, yPos + 5);
+            doc.text('Amount', 165, yPos + 5);
+
+            // Table row
+            yPos += 10;
+            doc.setFont(undefined, 'normal');
+            doc.text(serviceType, 20, yPos + 3);
+            doc.text(`$${amount.toFixed(2)}`, 165, yPos + 3);
+
+            if (discount > 0) {
+                yPos += 8;
+                doc.text(`Discount (${discount}%)`, 20, yPos + 3);
+                doc.text(`-$${(amount * discount / 100).toFixed(2)}`, 165, yPos + 3);
+            }
+
+            // Total
+            yPos += 10;
+            doc.setFillColor(248, 113, 2);
+            doc.rect(15, yPos, 180, 10, 'F');
+            doc.setTextColor(255, 255, 255);
+            doc.setFont(undefined, 'bold');
+            doc.setFontSize(12);
+            doc.text('TOTAL', 20, yPos + 6);
+            doc.text(`$${parseFloat(total).toFixed(2)}`, 165, yPos + 6);
+
+            // Payment Information
+            yPos += 18;
+            doc.setTextColor(51, 51, 51);
+            doc.setFontSize(10);
+            doc.setFont(undefined, 'normal');
+            doc.text(`Payment Method: ${paymentMethod}`, 15, yPos);
+            doc.text(`Payment Status: ${paymentStatus}`, 15, yPos + 6);
+
+            // Customer Signature
+            yPos += 20;
+            doc.setFont(undefined, 'bold');
+            doc.text('Customer Signature:', 15, yPos);
+            
+            // Add signature image
+            doc.addImage(signatureImage, 'PNG', 15, yPos + 2, 80, 30);
+            
+            // Signature line
+            doc.setDrawColor(200, 200, 200);
+            doc.line(15, yPos + 32, 95, yPos + 32);
+            
+            doc.setFont(undefined, 'normal');
+            doc.setFontSize(8);
+            doc.text('Signature', 15, yPos + 36);
+            doc.text(new Date().toLocaleDateString(), 70, yPos + 36);
+
+            // Footer
+            doc.setFontSize(8);
+            doc.setTextColor(100, 100, 100);
+            doc.text('Thank you for your business!', 105, 280, { align: 'center' });
+            doc.text('For questions about this invoice, please contact us at example@example.com', 105, 285, { align: 'center' });
+
+            // Save PDF
+            doc.save(`Invoice_${invoiceNumber}_${customerName.replace(/\s+/g, '_')}.pdf`);
+
+            // Show success message
+            alert('Invoice PDF generated successfully!');
+        });
+    </script>
+
+    <script src="js/script.js"></script>
+</body>
+</html>

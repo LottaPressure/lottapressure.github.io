@@ -145,6 +145,97 @@
             font-size: 0.9rem;
         }
 
+        /* Inactivity Warning Modal */
+        .inactivity-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            z-index: 10000;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .inactivity-modal.show {
+            display: flex;
+        }
+
+        .inactivity-content {
+            background: var(--white);
+            padding: 2.5rem;
+            border-radius: 15px;
+            box-shadow: 0 10px 50px rgba(0, 0, 0, 0.3);
+            max-width: 450px;
+            text-align: center;
+            animation: modalPop 0.3s ease;
+        }
+
+        @keyframes modalPop {
+            from {
+                transform: scale(0.8);
+                opacity: 0;
+            }
+            to {
+                transform: scale(1);
+                opacity: 1;
+            }
+        }
+
+        .inactivity-icon {
+            font-size: 4rem;
+            margin-bottom: 1rem;
+        }
+
+        .inactivity-title {
+            font-size: 1.8rem;
+            color: var(--dark-gray);
+            margin-bottom: 1rem;
+            font-weight: 700;
+        }
+
+        .inactivity-message {
+            color: var(--text-gray);
+            margin-bottom: 1.5rem;
+            line-height: 1.6;
+        }
+
+        .countdown-timer {
+            font-size: 3rem;
+            font-weight: 700;
+            color: var(--fire-dragon);
+            margin: 1rem 0;
+        }
+
+        .modal-buttons {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+        }
+
+        .modal-btn {
+            padding: 12px 30px;
+            border: none;
+            border-radius: 10px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        .btn-yes {
+            background: var(--fire-dragon);
+            color: var(--white);
+        }
+
+        .btn-yes:hover {
+            background: var(--too-blue);
+            transform: translateY(-2px);
+        }
+
         @media (max-width: 768px) {
             .dashboard-container {
                 padding: 80px 15px 30px;
@@ -225,10 +316,7 @@
                     </h2>
                     <div class="card-content">
                         <div class="quick-links">
-                            <a href="#" class="quick-link">View Schedule</a>
-                            <a href="#" class="quick-link">Customer List</a>
-                            <a href="#" class="quick-link">Timesheet</a>
-                            <a href="#" class="quick-link">Contact Info</a>
+                            <a href="https://docs.google.com/spreadsheets/d/1-D8t656PaK6Nhh2HVfKih-sTh_ITt5deXy_wtTk_WkQ/edit?usp=sharing" target="_blank" class="quick-link">📅 View Schedule</a>
                         </div>
                     </div>
                 </div>
@@ -275,13 +363,27 @@
                     </h2>
                     <div class="card-content">
                         <div class="quick-links">
-                            <a href="#" class="quick-link">Employee Info</a>
-                            <a href="#" class="quick-link">Equipment Guides</a>
+                            <a href="invoice-creator.html" class="quick-link">📄 Invoice Creator</a>
                         </div>
                     </div>
                 </div>
 
             
+            </div>
+        </div>
+    </div>
+
+    <!-- Inactivity Warning Modal -->
+    <div id="inactivityModal" class="inactivity-modal">
+        <div class="inactivity-content">
+            <div class="inactivity-icon">⏰</div>
+            <h2 class="inactivity-title">Are you still there?</h2>
+            <p class="inactivity-message">
+                You've been inactive for a while. Click "Yes" to continue your session, or you will be automatically logged out in:
+            </p>
+            <div class="countdown-timer" id="countdownTimer">5:00</div>
+            <div class="modal-buttons">
+                <button class="modal-btn btn-yes" onclick="resetInactivityTimer()">Yes, I'm Still Here</button>
             </div>
         </div>
     </div>
@@ -344,6 +446,110 @@
             sessionStorage.removeItem('employeeUsername');
             window.location.href = 'login.html';
         }
+
+        // Inactivity Timeout System
+        let inactivityTimer;
+        let countdownTimer;
+        let warningShown = false;
+        let countdownSeconds = 300; // 5 minutes in seconds
+
+        const INACTIVITY_TIMEOUT = 30 * 60 * 1000; // 30 minutes in milliseconds
+        const COUNTDOWN_DURATION = 5 * 60 * 1000; // 5 minutes in milliseconds
+
+        // Start the inactivity timer
+        function startInactivityTimer() {
+            // Clear any existing timers
+            clearTimeout(inactivityTimer);
+            clearInterval(countdownTimer);
+            
+            // Hide modal if it's showing
+            if (warningShown) {
+                document.getElementById('inactivityModal').classList.remove('show');
+                warningShown = false;
+            }
+            
+            // Set new inactivity timer
+            inactivityTimer = setTimeout(() => {
+                showInactivityWarning();
+            }, INACTIVITY_TIMEOUT);
+        }
+
+        // Show the inactivity warning modal
+        function showInactivityWarning() {
+            warningShown = true;
+            countdownSeconds = 300; // Reset to 5 minutes
+            
+            // Show modal
+            document.getElementById('inactivityModal').classList.add('show');
+            
+            // Update countdown display
+            updateCountdownDisplay();
+            
+            // Start countdown
+            countdownTimer = setInterval(() => {
+                countdownSeconds--;
+                updateCountdownDisplay();
+                
+                if (countdownSeconds <= 0) {
+                    // Time's up, log out the user
+                    clearInterval(countdownTimer);
+                    logout();
+                }
+            }, 1000);
+        }
+
+        // Update the countdown display
+        function updateCountdownDisplay() {
+            const minutes = Math.floor(countdownSeconds / 60);
+            const seconds = countdownSeconds % 60;
+            const display = `${minutes}:${seconds.toString().padStart(2, '0')}`;
+            document.getElementById('countdownTimer').textContent = display;
+        }
+
+        // Reset the inactivity timer (called when user confirms they're still there)
+        function resetInactivityTimer() {
+            startInactivityTimer();
+        }
+
+        // Track user activity
+        const activityEvents = ['mousedown', 'mousemove', 'keypress', 'scroll', 'touchstart', 'click'];
+        
+        activityEvents.forEach(event => {
+            document.addEventListener(event, () => {
+                // Only reset timer if warning is not shown
+                if (!warningShown) {
+                    startInactivityTimer();
+                }
+            }, true);
+        });
+
+        // Initialize inactivity timer when page loads
+        startInactivityTimer();
+
+        // Keyboard shortcut: CTRL+A+L
+        let keysPressed = {};
+        
+        document.addEventListener('keydown', (event) => {
+            keysPressed[event.key.toLowerCase()] = true;
+            
+            // Check if CTRL+A+L are all pressed
+            if ((keysPressed['control'] || event.ctrlKey) && keysPressed['a'] && keysPressed['l']) {
+                event.preventDefault(); // Prevent default browser behavior
+                
+                if (warningShown) {
+                    // Warning is already showing, force logout
+                    clearInterval(countdownTimer);
+                    logout();
+                } else {
+                    // Show the warning screen
+                    showInactivityWarning();
+                }
+            }
+        });
+        
+        document.addEventListener('keyup', (event) => {
+            delete keysPressed[event.key.toLowerCase()];
+        });
     </script>
 
     <script src="js/script.js"></script>
