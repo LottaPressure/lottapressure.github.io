@@ -1,0 +1,351 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes">
+    <meta name="description" content="Employee Dashboard - Lawrenceburg Pressure Washing">
+    <meta name="theme-color" content="#f87102">
+    <link rel="icon" type="image/webp" href="images/logosquare.webp">
+    <title>Employee Dashboard</title>
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <style>
+        .dashboard-container {
+            min-height: 100vh;
+            padding: 100px 20px 50px;
+            background: var(--light-gray);
+        }
+
+        .dashboard-header {
+            background: var(--fire-dragon);
+            color: var(--white);
+            padding: 2rem;
+            border-radius: 15px;
+            margin-bottom: 2rem;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+        }
+
+        .dashboard-header h1 {
+            margin: 0 0 0.5rem 0;
+            font-size: 2rem;
+        }
+
+        .dashboard-header p {
+            margin: 0;
+            opacity: 0.9;
+        }
+
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .dashboard-card {
+            background: var(--white);
+            padding: 2rem;
+            border-radius: 15px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+        }
+
+        .dashboard-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.15);
+        }
+
+        .card-title {
+            font-size: 1.3rem;
+            font-weight: 600;
+            color: var(--dark-gray);
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .card-icon {
+            font-size: 1.5rem;
+        }
+
+        .card-content {
+            color: var(--text-gray);
+            line-height: 1.6;
+        }
+
+        .quick-links {
+            display: flex;
+            flex-direction: column;
+            gap: 0.8rem;
+        }
+
+        .quick-link {
+            display: flex;
+            align-items: center;
+            padding: 1rem;
+            background: var(--light-gray);
+            border-radius: 10px;
+            text-decoration: none;
+            color: var(--dark-gray);
+            transition: all 0.3s ease;
+        }
+
+        .quick-link:hover {
+            background: var(--fire-dragon);
+            color: var(--white);
+            transform: translateX(5px);
+        }
+
+        .logout-button {
+            display: inline-block;
+            padding: 12px 30px;
+            background: var(--fire-dragon);
+            color: var(--white);
+            text-decoration: none;
+            font-weight: 600;
+            border-radius: 10px;
+            transition: all 0.3s ease;
+            border: none;
+            cursor: pointer;
+            font-family: 'Poppins', sans-serif;
+            font-size: 1rem;
+        }
+
+        .logout-button:hover {
+            background: var(--too-blue);
+            transform: translateY(-2px);
+        }
+
+        .stats-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+
+        .stat-box {
+            background: var(--light-gray);
+            padding: 1.5rem;
+            border-radius: 10px;
+            text-align: center;
+        }
+
+        .stat-number {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: var(--fire-dragon);
+            margin-bottom: 0.5rem;
+        }
+
+        .stat-label {
+            color: var(--text-gray);
+            font-size: 0.9rem;
+        }
+
+        @media (max-width: 768px) {
+            .dashboard-container {
+                padding: 80px 15px 30px;
+            }
+
+            .dashboard-header h1 {
+                font-size: 1.5rem;
+            }
+
+            .dashboard-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation Bar -->
+    <nav class="navbar" id="navbar">
+        <div class="container">
+            <div class="nav-brand">
+                <a href="index.html">
+                    <img src="images/logosquare.webp" alt="Lotta Pressure Logo" class="logo-img">
+                </a>
+            </div>
+            <ul class="nav-menu">
+                <li><a href="index.html#home" class="nav-link">Home</a></li>
+                <li><a href="index.html#services" class="nav-link">Services</a></li>
+                <li><a href="index.html#discount" class="nav-link">Military Discount</a></li>
+                <li><a href="index.html#reviews" class="nav-link">Reviews</a></li>
+                <li><a href="index.html#contact" class="nav-link">Contact</a></li>
+            </ul>
+            <div class="hamburger">
+                <span></span>
+                <span></span>
+                <span></span>
+                <span></span>
+                <span></span>
+                <span></span>
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Dashboard Content -->
+    <div class="dashboard-container">
+        <div class="container">
+            <div class="dashboard-header">
+                <h1>👋 Welcome, Employee</h1>
+                <p>Here's your dashboard overview</p>
+                <button class="logout-button" onclick="logout()" style="margin-top: 1rem;">Logout</button>
+            </div>
+
+            <div class="dashboard-grid">
+                <!-- Today's Schedule -->
+                <div class="dashboard-card">
+                    <h2 class="card-title">
+                        <span class="card-icon">📅</span>
+                        Today's Schedule
+                    </h2>
+                    <div class="card-content">
+                        <div class="stats-container" style="grid-template-columns: 1fr;">
+                            <div class="stat-box">
+                                <div class="stat-number">0</div>
+                                <div class="stat-label">Job(s) Today</div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+
+                <!-- Quick Links -->
+                <div class="dashboard-card">
+                    <h2 class="card-title">
+                        <span class="card-icon">🔗</span>
+                        Quick Links
+                    </h2>
+                    <div class="card-content">
+                        <div class="quick-links">
+                            <a href="#" class="quick-link">View Schedule</a>
+                            <a href="#" class="quick-link">Customer List</a>
+                            <a href="#" class="quick-link">Timesheet</a>
+                            <a href="#" class="quick-link">Contact Info</a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Company Updates -->
+                <div class="dashboard-card">
+                    <h2 class="card-title">
+                        <span class="card-icon">📢</span>
+                        Updates
+                    </h2>
+                    <div class="card-content">
+                        <p><strong>Latest:</strong></p>
+                        <ul style="margin-top: 0.5rem;">
+                            <li>No updates available</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Performance Stats -->
+                <div class="dashboard-card">
+                    <h2 class="card-title">
+                        <span class="card-icon">📊</span>
+                        This Month
+                    </h2>
+                    <div class="card-content">
+                        <div class="stats-container">
+                            <div class="stat-box">
+                                <div class="stat-number">0</div>
+                                <div class="stat-label">Jobs Completed</div>
+                            </div>
+                            <div class="stat-box">
+                                <div class="stat-number">0</div>
+                                <div class="stat-label">Positive Reviews</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Resources -->
+                <div class="dashboard-card">
+                    <h2 class="card-title">
+                        <span class="card-icon">📚</span>
+                        Resources
+                    </h2>
+                    <div class="card-content">
+                        <div class="quick-links">
+                            <a href="#" class="quick-link">Employee Info</a>
+                            <a href="#" class="quick-link">Equipment Guides</a>
+                        </div>
+                    </div>
+                </div>
+
+            
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h3>Lotta Pressure</h3>
+                    <p>Your trusted partner for residential pressure washing services.</p>
+                </div>
+                <div class="footer-section">
+                    <h4>Quick Links</h4>
+                    <ul>
+                        <li><a href="index.html#home">Home</a></li>
+                        <li><a href="index.html#services">Services</a></li>
+                        <li><a href="index.html#reviews">Reviews</a></li>
+                        <li><a href="index.html#contact">Contact</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4>Services</h4>
+                    <ul>
+                        <li>House Washing</li>
+                        <li>Driveway Cleaning</li>
+                        <li>Deck Restoration</li>
+                        <li>Window Cleaning</li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4>Connect</h4>
+                    <div class="social-links">
+                        <a href="#" class="social-link">Facebook</a>
+                        <a href="#" class="social-link">Instagram</a>
+                    </div>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2026 Lotta Pressure. All rights reserved. | Licensed & Insured</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Check if user is logged in (simple check - enhance with proper session management)
+        if (!sessionStorage.getItem('employeeLoggedIn')) {
+            // Redirect to login if not logged in
+            window.location.href = 'login.html';
+        }
+
+        // Display username if available
+        const username = sessionStorage.getItem('employeeUsername');
+        if (username) {
+            document.querySelector('.dashboard-header h1').textContent = `👋 Welcome, ${username}`;
+        }
+
+        function logout() {
+            sessionStorage.removeItem('employeeLoggedIn');
+            sessionStorage.removeItem('employeeUsername');
+            window.location.href = 'login.html';
+        }
+    </script>
+
+    <script src="js/script.js"></script>
+</body>
+</html>
