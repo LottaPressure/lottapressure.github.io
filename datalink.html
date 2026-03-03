@@ -1,0 +1,1199 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes">
+    <meta name="description" content="DataLink - Lawrenceburg Pressure Washing">
+    <meta name="theme-color" content="#f87102">
+    <link rel="icon" type="image/webp" href="images/logosquare.webp">
+    <title>DataLink | Lawrenceburg Pressure Washing</title>
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <style>
+        .datalink-container {
+            min-height: 100vh;
+            padding: 100px 20px 50px;
+            background: var(--light-gray);
+        }
+
+        .datalink-wrapper {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .page-header {
+            background: var(--white);
+            padding: 2rem;
+            border-radius: 15px 15px 0 0;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        .page-header h1 {
+            color: var(--dark-gray);
+            font-size: 2rem;
+            margin: 0;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .back-button {
+            padding: 10px 20px;
+            background: var(--text-gray);
+            color: var(--white);
+            text-decoration: none;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+            font-weight: 600;
+        }
+
+        .back-button:hover {
+            background: var(--dark-gray);
+            transform: translateY(-2px);
+        }
+
+        .datalink-content {
+            background: var(--white);
+            padding: 2rem;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            border-radius: 0 0 15px 15px;
+        }
+
+        .connection-status {
+            background: var(--light-gray);
+            padding: 2rem;
+            border-radius: 15px;
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        .connection-status.online {
+            background: #d4edda;
+            border: 2px solid #28a745;
+        }
+
+        .connection-status.offline {
+            background: #f8d7da;
+            border: 2px solid #dc3545;
+        }
+
+        .status-icon {
+            font-size: 4rem;
+            margin-bottom: 1rem;
+        }
+
+        .status-text {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--dark-gray);
+        }
+
+        .status-details {
+            color: var(--text-gray);
+            margin-top: 0.5rem;
+        }
+
+        .usb-load-button {
+            display: inline-block;
+            padding: 15px 30px;
+            background: var(--fire-dragon);
+            color: var(--white);
+            border: none;
+            border-radius: 10px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-family: 'Poppins', sans-serif;
+            margin: 1rem 0;
+            font-size: 1.1rem;
+        }
+
+        .usb-load-button:hover {
+            background: var(--too-blue);
+            transform: translateY(-2px);
+        }
+
+        .database-status {
+            margin: 1rem 0;
+            padding: 1rem;
+            border-radius: 8px;
+            font-weight: 600;
+            text-align: center;
+        }
+
+        .database-status.loaded {
+            background: #d4edda;
+            color: #155724;
+        }
+
+        .database-status.error {
+            background: #f8d7da;
+            color: #721c24;
+        }
+
+        .database-status.loading {
+            background: #fff3cd;
+            color: #856404;
+        }
+
+        .search-section {
+            margin: 2rem 0;
+            display: none;
+        }
+
+        .search-section.active {
+            display: block;
+        }
+
+        .search-input {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        .search-input:focus {
+            outline: none;
+            border-color: var(--fire-dragon);
+        }
+
+        .customer-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 1rem;
+            background: var(--white);
+            border-radius: 8px;
+            overflow: hidden;
+        }
+
+        .customer-table th {
+            background: var(--fire-dragon);
+            color: var(--white);
+            padding: 12px;
+            text-align: left;
+            font-weight: 600;
+        }
+
+        .customer-table td {
+            padding: 10px 12px;
+            border-bottom: 1px solid #e0e0e0;
+        }
+
+        .customer-table tr:hover {
+            background: var(--light-gray);
+        }
+
+        .no-data {
+            text-align: center;
+            color: var(--text-gray);
+            padding: 2rem;
+            background: var(--light-gray);
+            border-radius: 8px;
+            margin-top: 1rem;
+        }
+
+        .table-container {
+            overflow-x: auto;
+            margin-top: 1rem;
+        }
+
+        .action-buttons {
+            margin-top: 1rem;
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .btn-primary {
+            padding: 10px 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: var(--white);
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
+        }
+
+        .btn-secondary {
+            padding: 10px 20px;
+            background: var(--text-gray);
+            color: var(--white);
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        .btn-secondary:hover {
+            background: var(--dark-gray);
+        }
+
+        .btn-edit {
+            padding: 6px 12px;
+            background: #28a745;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .btn-edit:hover {
+            background: #218838;
+        }
+
+        .btn-delete {
+            padding: 6px 12px;
+            background: #dc3545;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .btn-delete:hover {
+            background: #c82333;
+        }
+
+        .customers-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(400px, 1fr));
+            gap: 1.5rem;
+            margin-top: 1.5rem;
+        }
+
+        .customer-card {
+            background: white;
+            border-radius: 12px;
+            padding: 1.5rem;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            transition: all 0.3s ease;
+        }
+
+        .customer-card:hover {
+            box-shadow: 0 4px 16px rgba(0,0,0,0.15);
+            transform: translateY(-2px);
+        }
+
+        .customer-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+            padding-bottom: 1rem;
+            border-bottom: 2px solid #e0e0e0;
+        }
+
+        .customer-actions {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .customer-name {
+            margin: 0;
+            color: var(--dark-gray);
+            font-size: 1.3rem;
+        }
+
+        .customer-details {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .detail-section {
+            font-size: 0.95rem;
+        }
+
+        .detail-section strong {
+            display: block;
+            margin-bottom: 0.5rem;
+            color: var(--dark-gray);
+        }
+
+        .detail-section ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .detail-section li {
+            padding: 0.3rem 0;
+            color: var(--text-gray);
+        }
+
+        .detail-section p {
+            margin: 0;
+            color: var(--text-gray);
+            line-height: 1.5;
+        }
+
+        .invoice-table {
+            width: 100%;
+            margin-top: 0.5rem;
+            font-size: 0.9rem;
+            border-collapse: collapse;
+        }
+
+        .invoice-table th {
+            background: #f0f0f0;
+            padding: 0.5rem;
+            text-align: left;
+            font-weight: 600;
+        }
+
+        .invoice-table td {
+            padding: 0.5rem;
+            border-bottom: 1px solid #e0e0e0;
+        }
+
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.7);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal-overlay.active {
+            display: flex;
+        }
+
+        .modal-content {
+            background: white;
+            border-radius: 12px;
+            padding: 2rem;
+            max-width: 600px;
+            max-height: 90vh;
+            overflow-y: auto;
+            width: 90%;
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .modal-header h2 {
+            margin: 0;
+        }
+
+        .modal-close {
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: var(--text-gray);
+        }
+
+        .form-group {
+            margin-bottom: 1rem;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+            color: var(--dark-gray);
+        }
+
+        .form-group input, .form-group textarea {
+            width: 100%;
+            padding: 0.75rem;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-family: 'Poppins', sans-serif;
+            font-size: 1rem;
+        }
+
+        .form-group textarea {
+            min-height: 100px;
+            resize: vertical;
+        }
+
+        .array-input {
+            display: flex;
+            gap: 0.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .array-input input {
+            flex: 1;
+        }
+
+        .btn-remove {
+            padding: 0.75rem 1rem;
+            background: #dc3545;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+        }
+
+        .btn-add-field {
+            padding: 0.5rem 1rem;
+            background: #28a745;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            margin-top: 0.5rem;
+        }
+
+        .modal-buttons {
+            display: flex;
+            gap: 1rem;
+            margin-top: 1.5rem;
+        }
+
+        .modal-buttons button {
+            flex: 1;
+            padding: 0.75rem;
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        .btn-save {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+
+        .btn-cancel {
+            background: #6c757d;
+            color: white;
+        }
+
+        @media (max-width: 768px) {
+            .page-header h1 {
+                font-size: 1.5rem;
+            }
+
+            .customer-table {
+                font-size: 0.9rem;
+            }
+            
+            .customer-table th,
+            .customer-table td {
+                padding: 8px;
+            }
+
+            .status-icon {
+                font-size: 3rem;
+            }
+
+            .status-text {
+                font-size: 1.2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation Bar -->
+    <nav class="navbar" id="navbar">
+        <div class="container">
+            <div class="nav-brand">
+                <img src="images/logosquare.webp" alt="Lotta Pressure Logo" class="logo-img">
+            </div>
+            <ul class="nav-menu">
+                <li><a href="employee-dashboard.html" class="nav-link">Dashboard</a></li>
+                <li><a href="invoice-creator.html" class="nav-link">Invoice Creator</a></li>
+                <li><a href="timecard.html" class="nav-link">Timecard</a></li>
+            </ul>
+            <div class="hamburger">
+                <span></span>
+                <span></span>
+                <span></span>
+                <span></span>
+                <span></span>
+                <span></span>
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+        </div>
+    </nav>
+
+    <div class="datalink-container">
+        <div class="datalink-wrapper">
+            <!-- Page Header -->
+            <div class="page-header">
+                <h1>
+                    <span id="headerIcon">💾</span>
+                    DataLink
+                </h1>
+                <a href="employee-dashboard.html" class="back-button">← Back to Dashboard</a>
+            </div>
+
+            <!-- Main Content -->
+            <div class="datalink-content">
+                <!-- Connection Status -->
+                <div id="connectionStatus" class="connection-status offline">
+                    <div class="status-icon" id="statusIcon">🔴</div>
+                    <div class="status-text" id="statusText">DataLink Offline</div>
+                    <div class="status-details" id="statusDetails">No database loaded</div>
+                </div>
+
+                <!-- Load Button -->
+                <div id="loadSection" style="text-align: center; display: none;">
+                    <p style="color: #6c757d; font-size: 1.1em; margin-top: 20px;">
+                        No database connected<br>
+                        <a href="employee-dashboard.html" style="color: #667eea; text-decoration: none; font-weight: 600;">
+                            ← Return to Dashboard to connect USB
+                        </a>
+                    </p>
+                </div>
+
+                <div id="databaseStatus"></div>
+
+                <!-- Action Buttons (shown when database is loaded) -->
+                <div id="actionButtons" class="action-buttons" style="display: none;">
+                    <button class="btn-primary" onclick="addNewCustomer()">➕ Add New Customer</button>
+                    <button class="btn-secondary" onclick="saveDatabase()">💾 Save Changes</button>
+                    <button class="btn-secondary" onclick="clearDatabase()">🗑️ Clear Database</button>
+                    <button class="btn-secondary" onclick="reloadDatabase()">🔄 Reload Database</button>
+                </div>
+
+                <!-- Search Section -->
+                <div id="searchSection" class="search-section">
+                    <input 
+                        type="text" 
+                        id="searchInput" 
+                        class="search-input" 
+                        placeholder="Search by name, phone, address, or any field..."
+                        oninput="filterCustomers()"
+                    >
+                </div>
+
+                <!-- Customer Cards Container -->
+                <div id="customerTableContainer" class="customers-container"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Edit/Add Customer Modal -->
+    <div id="customerModal" class="modal-overlay">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 id="modalTitle">Edit Customer</h2>
+                <button class="modal-close" onclick="closeModal()">✕</button>
+            </div>
+            <div id="modalBody">
+                <!-- Form will be dynamically generated -->
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Check if user is logged in
+        const loggedInUsername = sessionStorage.getItem('employeeUsername');
+        if (!loggedInUsername) {
+            window.location.href = 'login.html';
+        }
+
+        // Check if access was granted from dashboard
+        const datalinkAccess = sessionStorage.getItem('datalinkAccess');
+        const accessTime = sessionStorage.getItem('datalinkAccessTime');
+        const currentTime = Date.now();
+        const accessTimeout = 60000; // 1 minute timeout
+
+        if (!datalinkAccess || !accessTime || (currentTime - parseInt(accessTime)) > accessTimeout) {
+            // Access denied or expired - redirect to dashboard
+            alert('Please access DataLink from the dashboard module.');
+            window.location.href = 'employee-dashboard.html';
+        }
+
+        let customerDatabase = [];
+
+        // Load database from localStorage on page load
+        window.addEventListener('load', () => {
+            const savedDatabase = localStorage.getItem('customerDatabase');
+            if (savedDatabase) {
+                try {
+                    customerDatabase = JSON.parse(savedDatabase);
+                    updateConnectionStatus(true, customerDatabase.length);
+                    displayDatabase(customerDatabase);
+                    document.getElementById('searchSection').classList.add('active');
+                    document.getElementById('actionButtons').style.display = 'flex';
+                } catch (e) {
+                    console.error('Error loading cached database:', e);
+                    updateConnectionStatus(false);
+                    document.getElementById('loadSection').style.display = 'block';
+                }
+            } else {
+                updateConnectionStatus(false);
+                document.getElementById('loadSection').style.display = 'block';
+            }
+        });
+
+        // Update connection status display
+        function updateConnectionStatus(isOnline, recordCount = 0) {
+            const statusDiv = document.getElementById('connectionStatus');
+            const statusIcon = document.getElementById('statusIcon');
+            const statusText = document.getElementById('statusText');
+            const statusDetails = document.getElementById('statusDetails');
+            const headerIcon = document.getElementById('headerIcon');
+            const loadSection = document.getElementById('loadSection');
+
+            if (isOnline) {
+                statusDiv.className = 'connection-status online';
+                statusIcon.textContent = '🟢';
+                statusText.textContent = 'DataLink Online';
+                statusDetails.textContent = `${recordCount} customer records loaded`;
+                headerIcon.textContent = '🟢';
+                if (loadSection) loadSection.style.display = 'none';
+            } else {
+                statusDiv.className = 'connection-status offline';
+                statusIcon.textContent = '🔴';
+                statusText.textContent = 'DataLink Offline';
+                statusDetails.textContent = 'No database loaded';
+                headerIcon.textContent = '🔴';
+            }
+        }
+
+        // Reload database - redirect to dashboard
+        function reloadDatabase() {
+            if (confirm('Reconnect USB drive from the dashboard?')) {
+                window.location.href = 'employee-dashboard.html';
+            }
+        }
+
+        // Clear database
+        function clearDatabase() {
+            if (confirm('Are you sure you want to clear the database? This will remove all cached data.')) {
+                customerDatabase = [];
+                localStorage.removeItem('customerDatabase');
+                updateConnectionStatus(false);
+                document.getElementById('customerTableContainer').innerHTML = '';
+                document.getElementById('searchSection').classList.remove('active');
+                document.getElementById('actionButtons').style.display = 'none';
+                showStatus('Database cleared', 'loaded');
+                setTimeout(() => {
+                    document.getElementById('databaseStatus').style.display = 'none';
+                }, 2000);
+            }
+        }
+
+        // Display database as customer cards
+        function displayDatabase(data) {
+            const container = document.getElementById('customerTableContainer');
+            
+            if (!data || data.length === 0) {
+                container.innerHTML = '<div class="no-data">No customer data available</div>';
+                return;
+            }
+
+            let cardsHTML = '';
+            
+            data.forEach(customer => {
+                const addresses = Array.isArray(customer.addresses) ? customer.addresses : [customer.addresses || ''];
+                const phones = Array.isArray(customer.phones) ? customer.phones : [customer.phones || ''];
+                const emails = Array.isArray(customer.emails) ? customer.emails : [customer.emails || ''];
+                const pastInvoices = Array.isArray(customer.pastInvoices) ? customer.pastInvoices : [];
+                
+                cardsHTML += `
+                    <div class="customer-card" data-id="${customer.id}">
+                        <div class="customer-header">
+                            <h3 class="customer-name">${customer.name}</h3>
+                            <div class="customer-actions">
+                                <button class="btn-edit" onclick="editCustomer('${customer.id}')">✏️ Edit</button>
+                                <button class="btn-delete" onclick="deleteCustomer('${customer.id}')">🗑️ Delete</button>
+                            </div>
+                        </div>
+                        <div class="customer-details">
+                            <div class="detail-section">
+                                <strong>📍 Address(es):</strong>
+                                <ul>${addresses.map(addr => `<li>${addr}</li>`).join('')}</ul>
+                            </div>
+                            <div class="detail-section">
+                                <strong>📞 Phone(s):</strong>
+                                <ul>${phones.map(phone => `<li>${phone}</li>`).join('')}</ul>
+                            </div>
+                            <div class="detail-section">
+                                <strong>📧 Email(s):</strong>
+                                <ul>${emails.map(email => `<li>${email}</li>`).join('')}</ul>
+                            </div>
+                            <div class="detail-section">
+                                <strong>💰 Past Invoices:</strong>
+                                ${pastInvoices.length > 0 ? `
+                                    <table class="invoice-table">
+                                        <thead><tr><th>Date</th><th>Service</th><th>Amount</th></tr></thead>
+                                        <tbody>
+                                            ${pastInvoices.map(inv => `
+                                                <tr>
+                                                    <td>${inv.date}</td>
+                                                    <td>${inv.service}</td>
+                                                    <td>${inv.amount}</td>
+                                                </tr>
+                                            `).join('')}
+                                        </tbody>
+                                    </table>
+                                ` : '<p>No past invoices</p>'}
+                            </div>
+                            <div class="detail-section">
+                                <strong>📝 Notes:</strong>
+                                <p>${customer.notes || 'No notes'}</p>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            });
+            
+            container.innerHTML = cardsHTML;
+        }
+
+        // Filter customers based on search input
+        function filterCustomers() {
+            const searchTerm = document.getElementById('searchInput').value.toLowerCase();
+            
+            if (!searchTerm) {
+                displayDatabase(customerDatabase);
+                return;
+            }
+
+            const filtered = customerDatabase.filter(customer => {
+                return Object.values(customer).some(value => {
+                    return String(value).toLowerCase().includes(searchTerm);
+                });
+            });
+
+            displayDatabase(filtered);
+            
+            if (filtered.length === 0) {
+                document.getElementById('customerTableContainer').innerHTML = 
+                    '<div class="no-data">No customers found matching your search</div>';
+            }
+        }
+
+        // Show status message
+        function showStatus(message, type) {
+            const statusDiv = document.getElementById('databaseStatus');
+            statusDiv.textContent = message;
+            statusDiv.className = `database-status ${type}`;
+            statusDiv.style.display = 'block';
+        }
+
+        // Edit customer
+        function editCustomer(customerId) {
+            const customer = customerDatabase.find(c => c.id === customerId);
+            if (!customer) return;
+
+            document.getElementById('modalTitle').textContent = 'Edit Customer';
+            const modalBody = document.getElementById('modalBody');
+
+            const addresses = Array.isArray(customer.addresses) ? customer.addresses : [customer.addresses || ''];
+            const phones = Array.isArray(customer.phones) ? customer.phones : [customer.phones || ''];
+            const emails = Array.isArray(customer.emails) ? customer.emails : [customer.emails || ''];
+            const pastInvoices = Array.isArray(customer.pastInvoices) ? customer.pastInvoices : [];
+
+            modalBody.innerHTML = `
+                <input type="hidden" id="customerId" value="${customer.id}">
+                
+                <div class="form-group">
+                    <label>Customer Name</label>
+                    <input type="text" id="customerName" value="${customer.name}">
+                </div>
+
+                <div class="form-group">
+                    <label>Addresses</label>
+                    <div id="addressesContainer">
+                        ${addresses.map((addr, i) => `
+                            <div class="array-input">
+                                <input type="text" value="${addr}" class="address-input">
+                                <button class="btn-remove" onclick="this.parentElement.remove()">✕</button>
+                            </div>
+                        `).join('')}
+                    </div>
+                    <button class="btn-add-field" onclick="addArrayField('addressesContainer', 'address-input')">+ Add Address</button>
+                </div>
+
+                <div class="form-group">
+                    <label>Phone Numbers</label>
+                    <div id="phonesContainer">
+                        ${phones.map((phone, i) => `
+                            <div class="array-input">
+                                <input type="text" value="${phone}" class="phone-input">
+                                <button class="btn-remove" onclick="this.parentElement.remove()">✕</button>
+                            </div>
+                        `).join('')}
+                    </div>
+                    <button class="btn-add-field" onclick="addArrayField('phonesContainer', 'phone-input')">+ Add Phone</button>
+                </div>
+
+                <div class="form-group">
+                    <label>Emails</label>
+                    <div id="emailsContainer">
+                        ${emails.map((email, i) => `
+                            <div class="array-input">
+                                <input type="email" value="${email}" class="email-input">
+                                <button class="btn-remove" onclick="this.parentElement.remove()">✕</button>
+                            </div>
+                        `).join('')}
+                    </div>
+                    <button class="btn-add-field" onclick="addArrayField('emailsContainer', 'email-input')">+ Add Email</button>
+                </div>
+
+                <div class="form-group">
+                    <label>Past Invoices</label>
+                    <div id="invoicesContainer">
+                        ${pastInvoices.map((inv, i) => `
+                            <div class="invoice-input" style="border: 1px solid #e0e0e0; padding: 1rem; border-radius: 8px; margin-bottom: 0.5rem;">
+                                <input type="date" value="${inv.date}" placeholder="Date" class="invoice-date" style="margin-bottom: 0.5rem;">
+                                <input type="text" value="${inv.service}" placeholder="Service" class="invoice-service" style="margin-bottom: 0.5rem;">
+                                <input type="text" value="${inv.amount}" placeholder="Amount" class="invoice-amount">
+                                <button class="btn-remove" onclick="this.parentElement.remove()" style="margin-top: 0.5rem;">✕ Remove Invoice</button>
+                            </div>
+                        `).join('')}
+                    </div>
+                    <button class="btn-add-field" onclick="addInvoiceField()">+ Add Invoice</button>
+                </div>
+
+                <div class="form-group">
+                    <label>Notes</label>
+                    <textarea id="customerNotes">${customer.notes || ''}</textarea>
+                </div>
+
+                <div class="modal-buttons">
+                    <button class="btn-save" onclick="saveCustomer()">Save Changes</button>
+                    <button class="btn-cancel" onclick="closeModal()">Cancel</button>
+                </div>
+            `;
+
+            document.getElementById('customerModal').classList.add('active');
+        }
+
+        // Add new customer
+        function addNewCustomer() {
+            document.getElementById('modalTitle').textContent = 'Add New Customer';
+            const modalBody = document.getElementById('modalBody');
+
+            // Generate new ID
+            const maxId = customerDatabase.length > 0 ? 
+                Math.max(...customerDatabase.map(c => parseInt(c.id))) : 0;
+            const newId = String(maxId + 1).padStart(3, '0');
+
+            modalBody.innerHTML = `
+                <input type="hidden" id="customerId" value="${newId}">
+                
+                <div class="form-group">
+                    <label>Customer Name</label>
+                    <input type="text" id="customerName" placeholder="Enter customer name">
+                </div>
+
+                <div class="form-group">
+                    <label>Addresses</label>
+                    <div id="addressesContainer">
+                        <div class="array-input">
+                            <input type="text" placeholder="Enter address" class="address-input">
+                            <button class="btn-remove" onclick="this.parentElement.remove()">✕</button>
+                        </div>
+                    </div>
+                    <button class="btn-add-field" onclick="addArrayField('addressesContainer', 'address-input')">+ Add Address</button>
+                </div>
+
+                <div class="form-group">
+                    <label>Phone Numbers</label>
+                    <div id="phonesContainer">
+                        <div class="array-input">
+                            <input type="text" placeholder="Enter phone number" class="phone-input">
+                            <button class="btn-remove" onclick="this.parentElement.remove()">✕</button>
+                        </div>
+                    </div>
+                    <button class="btn-add-field" onclick="addArrayField('phonesContainer', 'phone-input')">+ Add Phone</button>
+                </div>
+
+                <div class="form-group">
+                    <label>Emails</label>
+                    <div id="emailsContainer">
+                        <div class="array-input">
+                            <input type="email" placeholder="Enter email" class="email-input">
+                            <button class="btn-remove" onclick="this.parentElement.remove()">✕</button>
+                        </div>
+                    </div>
+                    <button class="btn-add-field" onclick="addArrayField('emailsContainer', 'email-input')">+ Add Email</button>
+                </div>
+
+                <div class="form-group">
+                    <label>Past Invoices (Optional)</label>
+                    <div id="invoicesContainer"></div>
+                    <button class="btn-add-field" onclick="addInvoiceField()">+ Add Invoice</button>
+                </div>
+
+                <div class="form-group">
+                    <label>Notes</label>
+                    <textarea id="customerNotes" placeholder="Enter any notes about the customer"></textarea>
+                </div>
+
+                <div class="modal-buttons">
+                    <button class="btn-save" onclick="saveCustomer()">Add Customer</button>
+                    <button class="btn-cancel" onclick="closeModal()">Cancel</button>
+                </div>
+            `;
+
+            document.getElementById('customerModal').classList.add('active');
+        }
+
+        // Add array field helper
+        function addArrayField(containerId, className) {
+            const container = document.getElementById(containerId);
+            const div = document.createElement('div');
+            div.className = 'array-input';
+            div.innerHTML = `
+                <input type="text" class="${className}" placeholder="Enter value">
+                <button class="btn-remove" onclick="this.parentElement.remove()">✕</button>
+            `;
+            container.appendChild(div);
+        }
+
+        // Add invoice field
+        function addInvoiceField() {
+            const container = document.getElementById('invoicesContainer');
+            const div = document.createElement('div');
+            div.className = 'invoice-input';
+            div.style.cssText = 'border: 1px solid #e0e0e0; padding: 1rem; border-radius: 8px; margin-bottom: 0.5rem;';
+            div.innerHTML = `
+                <input type="date" placeholder="Date" class="invoice-date" style="margin-bottom: 0.5rem; width: 100%; padding: 0.5rem;">
+                <input type="text" placeholder="Service" class="invoice-service" style="margin-bottom: 0.5rem; width: 100%; padding: 0.5rem;">
+                <input type="text" placeholder="Amount (e.g., $450.00)" class="invoice-amount" style="width: 100%; padding: 0.5rem;">
+                <button class="btn-remove" onclick="this.parentElement.remove()" style="margin-top: 0.5rem;">✕ Remove Invoice</button>
+            `;
+            container.appendChild(div);
+        }
+
+        // Save customer
+        function saveCustomer() {
+            const id = document.getElementById('customerId').value;
+            const name = document.getElementById('customerName').value.trim();
+
+            if (!name) {
+                alert('Customer name is required!');
+                return;
+            }
+
+            // Collect addresses
+            const addresses = Array.from(document.querySelectorAll('.address-input'))
+                .map(input => input.value.trim())
+                .filter(val => val);
+
+            // Collect phones
+            const phones = Array.from(document.querySelectorAll('.phone-input'))
+                .map(input => input.value.trim())
+                .filter(val => val);
+
+            // Collect emails
+            const emails = Array.from(document.querySelectorAll('.email-input'))
+                .map(input => input.value.trim())
+                .filter(val => val);
+
+            // Collect invoices
+            const invoiceInputs = document.querySelectorAll('.invoice-input');
+            const pastInvoices = Array.from(invoiceInputs).map(div => {
+                const date = div.querySelector('.invoice-date').value;
+                const service = div.querySelector('.invoice-service').value.trim();
+                const amount = div.querySelector('.invoice-amount').value.trim();
+                return { date, service, amount };
+            }).filter(inv => inv.date && inv.service && inv.amount);
+
+            const notes = document.getElementById('customerNotes').value.trim();
+
+            const customer = {
+                id,
+                name,
+                addresses,
+                phones,
+                emails,
+                pastInvoices,
+                notes
+            };
+
+            // Check if editing or adding
+            const existingIndex = customerDatabase.findIndex(c => c.id === id);
+            if (existingIndex >= 0) {
+                customerDatabase[existingIndex] = customer;
+            } else {
+                customerDatabase.push(customer);
+            }
+
+            // Update display
+            displayDatabase(customerDatabase);
+            closeModal();
+            showStatus('✅ Customer saved in memory! Click "Save Changes" button to write to USB.', 'loaded');
+            
+            setTimeout(() => {
+                document.getElementById('databaseStatus').style.display = 'none';
+            }, 5000);
+        }
+
+        // Close modal
+        function closeModal() {
+            document.getElementById('customerModal').classList.remove('active');
+        }
+
+        // Delete customer
+        function deleteCustomer(customerId) {
+            const customer = customerDatabase.find(c => c.id === customerId);
+            if (!customer) return;
+
+            if (confirm(`Are you sure you want to delete ${customer.name}? This cannot be undone.`)) {
+                // Remove from database
+                customerDatabase = customerDatabase.filter(c => c.id !== customerId);
+                
+                // Update display
+                displayDatabase(customerDatabase);
+                
+                // Update localStorage
+                localStorage.setItem('customerDatabase', JSON.stringify(customerDatabase));
+                
+                showStatus('✅ Customer deleted! Click "Save Changes" to persist to USB.', 'loaded');
+                
+                setTimeout(() => {
+                    document.getElementById('databaseStatus').style.display = 'none';
+                }, 5000);
+            }
+        }
+
+        // Save database with password protection
+        async function saveDatabase() {
+            const storedPassword = localStorage.getItem('databasePassword');
+            
+            if (!storedPassword) {
+                alert('❌ Access denied! Database was not loaded with proper authentication.');
+                return;
+            }
+
+            // Prompt for password confirmation
+            const password = prompt('🔒 Confirm password to save changes:');
+            
+            if (password === null) return; // User cancelled
+            
+            if (password !== storedPassword) {
+                alert('❌ Incorrect password! Changes not saved.');
+                return;
+            }
+
+            try {
+                // Update localStorage
+                localStorage.setItem('customerDatabase', JSON.stringify(customerDatabase));
+                
+                // Update metadata
+                const metadata = JSON.parse(localStorage.getItem('databaseMetadata') || '{}');
+                metadata.recordCount = customerDatabase.length;
+                metadata.lastModified = new Date().toISOString();
+                localStorage.setItem('databaseMetadata', JSON.stringify(metadata));
+
+                showStatus('💾 Saving to USB drive...', 'loading');
+                
+                // Retrieve the file handle from IndexedDB
+                const dbName = 'DatalinkDB';
+                const request = indexedDB.open(dbName, 1);
+                
+                request.onsuccess = async (event) => {
+                    try {
+                        const db = event.target.result;
+                        const transaction = db.transaction(['fileHandles'], 'readonly');
+                        const store = transaction.objectStore('fileHandles');
+                        const getRequest = store.get('databaseHandle');
+                        
+                        getRequest.onsuccess = async () => {
+                            const fileHandle = getRequest.result;
+                            
+                            if (!fileHandle) {
+                                alert('❌ Error: Original file handle not found. Please reconnect USB.');
+                                showStatus('❌ Save failed - reconnect USB', 'error');
+                                return;
+                            }
+                            
+                            try {
+                                // Check if we still have permission
+                                const permission = await fileHandle.queryPermission({ mode: 'readwrite' });
+                                
+                                if (permission !== 'granted') {
+                                    const newPermission = await fileHandle.requestPermission({ mode: 'readwrite' });
+                                    if (newPermission !== 'granted') {
+                                        alert('❌ Permission denied to write to file.');
+                                        showStatus('❌ Permission denied', 'error');
+                                        return;
+                                    }
+                                }
+                                
+                                // Create a writable stream
+                                const writable = await fileHandle.createWritable();
+                                
+                                // Write the updated database with password
+                                const dataToSave = {
+                                    password: storedPassword,
+                                    customers: customerDatabase
+                                };
+                                const dataStr = JSON.stringify(dataToSave, null, 2);
+                                await writable.write(dataStr);
+                                await writable.close();
+
+                                showStatus('✅ Database successfully saved to USB!', 'loaded');
+                                updateConnectionStatus(true, customerDatabase.length);
+                                
+                                setTimeout(() => {
+                                    document.getElementById('databaseStatus').style.display = 'none';
+                                }, 5000);
+                            } catch (writeError) {
+                                console.error('Error writing to file:', writeError);
+                                alert('❌ Error writing to file: ' + writeError.message);
+                                showStatus('❌ Write error', 'error');
+                            }
+                        };
+                        
+                        getRequest.onerror = () => {
+                            alert('❌ Error retrieving file handle. Please reconnect USB.');
+                            showStatus('❌ Error accessing file', 'error');
+                        };
+                    } catch (dbError) {
+                        console.error('Error accessing IndexedDB:', dbError);
+                        alert('❌ Error accessing file handle: ' + dbError.message);
+                        showStatus('❌ Database access error', 'error');
+                    }
+                };
+                
+                request.onerror = () => {
+                    alert('❌ Error opening database. Please reconnect USB.');
+                    showStatus('❌ Connection error', 'error');
+                };
+            } catch (error) {
+                console.error('Error saving database:', error);
+                alert('❌ Error saving database: ' + error.message);
+                showStatus('❌ Save failed', 'error');
+            }
+        }
+    </script>
+
+    <script src="js/script.js"></script>
+</body>
+</html>

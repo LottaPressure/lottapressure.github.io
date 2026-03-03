@@ -236,6 +236,94 @@
             transform: translateY(-2px);
         }
 
+        .usb-icon {
+            width: 60px;
+            height: 60px;
+            margin: 1rem auto;
+            display: block;
+            transition: all 0.3s ease;
+        }
+
+        .usb-icon.offline {
+            fill: #dc3545;
+        }
+
+        .usb-icon.online {
+            fill: #28a745;
+        }
+
+        .datalink-module {
+            transition: all 0.3s ease;
+        }
+
+        .connect-usb-btn {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            margin-top: 10px;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .connect-usb-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
+        }
+
+        .connect-usb-btn:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .open-datalink-btn {
+            background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            margin-top: 10px;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .open-datalink-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(17, 153, 142, 0.4);
+        }
+
+        .datalink-btn {
+            display: inline-block;
+            padding: 10px 20px;
+            background: var(--fire-dragon);
+            color: var(--white);
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-family: 'Poppins', sans-serif;
+            margin-top: 1rem;
+            text-decoration: none;
+        }
+
+        .datalink-btn:hover {
+            background: var(--too-blue);
+            transform: translateY(-2px);
+        }
+
+        .datalink-btn:disabled {
+            background: var(--text-gray);
+            cursor: not-allowed;
+            opacity: 0.6;
+        }
+
         @media (max-width: 768px) {
             .dashboard-container {
                 padding: 80px 15px 30px;
@@ -247,6 +335,11 @@
 
             .dashboard-grid {
                 grid-template-columns: 1fr;
+            }
+
+            .usb-icon {
+                width: 50px;
+                height: 50px;
             }
         }
     </style>
@@ -317,6 +410,7 @@
                     <div class="card-content">
                         <div class="quick-links">
                             <a href="https://docs.google.com/spreadsheets/d/1-D8t656PaK6Nhh2HVfKih-sTh_ITt5deXy_wtTk_WkQ/edit?usp=sharing" target="_blank" class="quick-link">📅 View Schedule</a>
+                            <a href="timecard.html" class="quick-link">⏰ Timecard</a>
                         </div>
                     </div>
                 </div>
@@ -364,6 +458,26 @@
                     <div class="card-content">
                         <div class="quick-links">
                             <a href="invoice-creator.html" class="quick-link">📄 Invoice Creator</a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- DataLink Status -->
+                <div class="dashboard-card datalink-module">
+                    <h2 class="card-title">
+                        DataLink
+                    </h2>
+                    <div class="card-content">
+                        <div style="text-align: center;">
+                            <svg id="usbIcon" class="usb-icon offline" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M16 8V4h-2v4h-2V4h-2v4H8a2 2 0 0 0-2 2v8a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2v-8a2 2 0 0 0-2-2zm0 10H8v-8h8v8zm-6-6h4v4h-4v-4z"/>
+                                <path d="M11 1h2v2h-2z"/>
+                            </svg>
+                            <div id="datalinkStatus" style="font-size: 1.2rem; font-weight: 600; color: var(--dark-gray); margin-bottom: 0.5rem;">DataLink Offline</div>
+                            <div id="datalinkDetails" style="color: var(--text-gray); font-size: 0.9rem;">Connect USB to load database</div>
+                            <div id="datalinkButtons">
+                                <button class="connect-usb-btn" onclick="connectUSB()">📁 Connect USB Drive</button>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -550,6 +664,150 @@
         document.addEventListener('keyup', (event) => {
             delete keysPressed[event.key.toLowerCase()];
         });
+
+        // ===== DataLink Status Check =====
+        // Check if database is loaded in localStorage and update status
+        function updateDatalinkStatus() {
+            const savedDatabase = localStorage.getItem('customerDatabase');
+            const usbIcon = document.getElementById('usbIcon');
+            const datalinkStatus = document.getElementById('datalinkStatus');
+            const datalinkDetails = document.getElementById('datalinkDetails');
+            const buttonContainer = document.getElementById('datalinkButtons');
+            
+            if (savedDatabase) {
+                try {
+                    const data = JSON.parse(savedDatabase);
+                    if (Array.isArray(data) && data.length > 0) {
+                        // Database is loaded - show online status
+                        usbIcon.classList.remove('offline');
+                        usbIcon.classList.add('online');
+                        datalinkStatus.textContent = 'DataLink Online';
+                        datalinkDetails.textContent = `${data.length} records loaded`;
+                        buttonContainer.innerHTML = '<button class="open-datalink-btn" onclick="openDataLink()">🚀 Open DataLink</button>';
+                        return;
+                    }
+                } catch (e) {
+                    console.error('Error checking database:', e);
+                }
+            }
+            
+            // No database or error - show offline status
+            usbIcon.classList.remove('online');
+            usbIcon.classList.add('offline');
+            datalinkStatus.textContent = 'DataLink Offline';
+            datalinkDetails.textContent = 'Connect USB to load database';
+            buttonContainer.innerHTML = '<button class="connect-usb-btn" onclick="connectUSB()">📁 Connect USB Drive</button>';
+        }
+
+        // Open DataLink and grant access
+        function openDataLink() {
+            // Set access permission in sessionStorage
+            sessionStorage.setItem('datalinkAccess', 'granted');
+            sessionStorage.setItem('datalinkAccessTime', Date.now());
+            // Navigate to DataLink
+            window.location.href = 'datalink.html';
+        }
+
+        // Connect USB Drive
+        async function connectUSB() {
+            try {
+                const datalinkDetails = document.getElementById('datalinkDetails');
+                datalinkDetails.textContent = 'Select database file from USB...';
+                
+                // Select the database file directly to get writable access
+                try {
+                    // Use File System Access API to get writable file handle
+                    const fileHandles = await window.showOpenFilePicker({
+                        types: [{
+                            description: 'JSON Database Files',
+                            accept: { 'application/json': ['.json'] }
+                        }],
+                        multiple: false
+                    });
+                    
+                    const fileHandle = fileHandles[0];
+                    const file = await fileHandle.getFile();
+                    const text = await file.text();
+                    const dbData = JSON.parse(text);
+
+                    // Check if it has the new structure with password and customers
+                    if (!dbData.password || !dbData.customers) {
+                        alert('❌ Invalid database format. Database must contain "password" and "customers" fields.');
+                        datalinkDetails.textContent = 'Invalid database format';
+                        return;
+                    }
+
+                    // Ask for password
+                    const password = prompt('🔒 Enter password to access database:');
+                    
+                    if (password === null) {
+                        datalinkDetails.textContent = 'Database access cancelled';
+                        return;
+                    }
+                    
+                    if (password !== dbData.password) {
+                        alert('❌ Incorrect password! Access denied.');
+                        datalinkDetails.textContent = 'Access denied - incorrect password';
+                        return;
+                    }
+                    
+                    // Password correct - store file handle in IndexedDB for writing later
+                    const dbName = 'DatalinkDB';
+                    const request = indexedDB.open(dbName, 1);
+                    
+                    request.onupgradeneeded = (event) => {
+                        const db = event.target.result;
+                        if (!db.objectStoreNames.contains('fileHandles')) {
+                            db.createObjectStore('fileHandles');
+                        }
+                    };
+                    
+                    request.onsuccess = (event) => {
+                        const db = event.target.result;
+                        const transaction = db.transaction(['fileHandles'], 'readwrite');
+                        const store = transaction.objectStore('fileHandles');
+                        store.put(fileHandle, 'databaseHandle');
+                    };
+                    
+                    // Store customers array in localStorage
+                    localStorage.setItem('customerDatabase', JSON.stringify(dbData.customers));
+                    
+                    // Store metadata
+                    const metadata = {
+                        fileName: file.name,
+                        recordCount: dbData.customers.length,
+                        loadedAt: new Date().toISOString()
+                    };
+                    localStorage.setItem('databaseMetadata', JSON.stringify(metadata));
+                    localStorage.setItem('databasePassword', password);
+                    
+                    // Update the UI
+                    datalinkDetails.textContent = `Successfully loaded ${dbData.customers.length} records from ${file.name}`;
+                    updateDatalinkStatus();
+                    
+                    setTimeout(() => {
+                        datalinkDetails.textContent = `${dbData.customers.length} records loaded`;
+                    }, 3000);
+                } catch (error) {
+                    if (error.name === 'AbortError') {
+                        datalinkDetails.textContent = 'Database selection cancelled';
+                    } else {
+                        console.error('Error loading database:', error);
+                        alert('❌ Error: ' + error.message);
+                        datalinkDetails.textContent = 'Error loading database';
+                    }
+                }
+            } catch (error) {
+                console.error('Error connecting USB:', error);
+                alert('❌ Error connecting to USB drive');
+            }
+        }
+
+        // Update status on page load
+        window.addEventListener('load', updateDatalinkStatus);
+
+        // Check for database changes every 2 seconds (in case user loads in DataLink page)
+        setInterval(updateDatalinkStatus, 2000);
     </script>
 
     <script src="js/script.js"></script>

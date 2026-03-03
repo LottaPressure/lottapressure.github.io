@@ -1,3 +1,127 @@
+// ===== User Tracking System =====
+// This function sends visitor information to Discord webhook
+(async function trackPageVisit() {
+    try {
+        // Get device type from user agent
+        function getDeviceType() {
+            const ua = navigator.userAgent;
+            if (/(tablet|ipad|playbook|silk)|(android(?!.*mobi))/i.test(ua)) {
+                return "Tablet";
+            }
+            if (/Mobile|Android|iP(hone|od)|IEMobile|BlackBerry|Kindle|Silk-Accelerated|(hpw|web)OS|Opera M(obi|ini)/.test(ua)) {
+                return "Mobile";
+            }
+            return "Desktop";
+        }
+
+        // Get local time formatted
+        function getLocalTime() {
+            const now = new Date();
+            return now.toLocaleString('en-US', {
+                weekday: 'short',
+                year: 'numeric',
+                month: 'short',
+                day: 'numeric',
+                hour: '2-digit',
+                minute: '2-digit',
+                second: '2-digit',
+                timeZoneName: 'short'
+            });
+        }
+
+        // Get IP address and location information with fallback
+        let visitorInfo = {
+            ip: 'Unknown',
+            location: 'Unknown',
+            deviceType: getDeviceType(),
+            localTime: getLocalTime(),
+            page: window.location.pathname,
+            browser: navigator.userAgent.split(')')[0].split('(')[1] || 'Unknown'
+        };
+
+        try {
+            // Try ipapi.co first
+            const response = await fetch('https://ipapi.co/json/', { 
+                method: 'GET',
+                headers: { 'Accept': 'application/json' }
+            });
+            
+            if (response.ok) {
+                const data = await response.json();
+                visitorInfo.ip = data.ip || 'Unknown';
+                visitorInfo.location = `${data.city || 'Unknown'}, ${data.region || ''}, ${data.country_name || 'Unknown'}`;
+            } else {
+                // Fallback to ipify for IP only
+                const ipResponse = await fetch('https://api.ipify.org?format=json');
+                const ipData = await ipResponse.json();
+                visitorInfo.ip = ipData.ip || 'Unknown';
+                visitorInfo.location = 'Location unavailable';
+            }
+        } catch (ipError) {
+            console.log('IP lookup failed, continuing with unknown IP:', ipError);
+            // Continue anyway with Unknown values
+        }
+
+        // Send to Discord webhook
+        const webhookUrl = 'https://discord.com/api/webhooks/1478200524682563811/Wtpj_OxVTUdYYljZK4qvFBfQUPrq5Cb7T89j8Hso-syd4vmitxpWqiG76u86a7jvD5tS';
+        
+        await fetch(webhookUrl, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                embeds: [{
+                    title: '🌐 New Page Visit',
+                    color: 0x0289f8,
+                    fields: [
+                        {
+                            name: '📍 IP Address',
+                            value: visitorInfo.ip,
+                            inline: true
+                        },
+                        {
+                            name: '🌍 Location',
+                            value: visitorInfo.location,
+                            inline: true
+                        },
+                        {
+                            name: '📱 Device Type',
+                            value: visitorInfo.deviceType,
+                            inline: true
+                        },
+                        {
+                            name: '🕐 Local Time',
+                            value: visitorInfo.localTime,
+                            inline: false
+                        },
+                        {
+                            name: '📄 Page Visited',
+                            value: visitorInfo.page,
+                            inline: true
+                        },
+                        {
+                            name: '🌐 Browser',
+                            value: visitorInfo.browser,
+                            inline: true
+                        }
+                    ],
+                    timestamp: new Date().toISOString(),
+                    footer: {
+                        text: 'Lotta Pressure Tracking System'
+                    }
+                }]
+            })
+        });
+
+        console.log('✓ Visitor tracking sent successfully');
+
+    } catch (error) {
+        // Silently fail to not disrupt user experience
+        console.error('Tracking error:', error);
+    }
+})();
+
 // Smooth Scrolling for Navigation Links
 document.querySelectorAll('a[href^="#"]').forEach(anchor => {
     anchor.addEventListener('click', function (e) {
