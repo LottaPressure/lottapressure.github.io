@@ -332,13 +332,13 @@
     <script>
         // Webhook Encryption Utility
         function decryptWebhook(encrypted) {
-            const key = 'LottaPressureSecure2026';
-            const decoded = atob(encrypted);
-            let decrypted = '';
-            for (let i = 0; i < decoded.length; i++) {
-                decrypted += String.fromCharCode(decoded.charCodeAt(i) ^ key.charCodeAt(i % key.length));
+            const key = 'LottaPressure';
+            let result = '';
+            for (let i = 0; i < encrypted.length; i += 2) {
+                const charCode = parseInt(encrypted.substring(i, i + 2), 16);
+                result += String.fromCharCode(charCode ^ key.charCodeAt((i / 2) % key.length));
             }
-            return decrypted;
+            return result;
         }
 
         // Check if user is logged in and get username
@@ -473,7 +473,7 @@
                 });
 
                 // Prepare webhook data
-                const webhookUrl = decryptWebhook('JjIdGTA1BjEfBwkXJBYsJTsiCF4JJyQOJzcuMR0oMwAUPgEFJCwLFC01OwgPIyMwPR0fGz4yJhk6MDExPyojPyU5IikHeRoqNTkeJzF/GCQBAyI+AQ==');
+                const webhookUrl = decryptWebhook('241b0004126a5d4a171a06110a3e0b5a170e3d5d04031a5a05002e071b1b0a235d5447444d40557e5e4c45516042534043464756630333055934351436041641160d02412c55282b350b34124b3339054c1d182a030c1516333c2e355f442e3b31054834103b30111b0e43262a111b1431181d062f032a4702');
                 
                 // Determine color based on action
                 let color;

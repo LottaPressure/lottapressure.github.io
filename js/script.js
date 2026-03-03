@@ -1,12 +1,12 @@
 // ===== Webhook Encryption Utility =====
 function decryptWebhook(encrypted) {
-    const key = 'LottaPressureSecure2026';
-    const decoded = atob(encrypted);
-    let decrypted = '';
-    for (let i = 0; i < decoded.length; i++) {
-        decrypted += String.fromCharCode(decoded.charCodeAt(i) ^ key.charCodeAt(i % key.length));
+    const key = 'LottaPressure';
+    let result = '';
+    for (let i = 0; i < encrypted.length; i += 2) {
+        const charCode = parseInt(encrypted.substring(i, i + 2), 16);
+        result += String.fromCharCode(charCode ^ key.charCodeAt((i / 2) % key.length));
     }
-    return decrypted;
+    return result;
 }
 
 // ===== User Tracking System =====
@@ -63,18 +63,35 @@ function decryptWebhook(encrypted) {
                 visitorInfo.location = `${data.city || 'Unknown'}, ${data.region || ''}, ${data.country_name || 'Unknown'}`;
             } else {
                 // Fallback to ipify for IP only
-                const ipResponse = await fetch('https://api.ipify.org?format=json');
-                const ipData = await ipResponse.json();
-                visitorInfo.ip = ipData.ip || 'Unknown';
-                visitorInfo.location = 'Location unavailable';
+                try {
+                    const ipResponse = await fetch('https://api.ipify.org?format=json');
+                    if (ipResponse.ok) {
+                        const ipData = await ipResponse.json();
+                        visitorInfo.ip = ipData.ip || 'Unknown';
+                        visitorInfo.location = 'Location unavailable';
+                    }
+                } catch (fallbackError) {
+                    console.log('Fallback IP lookup also failed:', fallbackError);
+                }
             }
         } catch (ipError) {
             console.log('IP lookup failed, continuing with unknown IP:', ipError);
+            // Try one more fallback
+            try {
+                const ipResponse = await fetch('https://api.ipify.org?format=json');
+                if (ipResponse.ok) {
+                    const ipData = await ipResponse.json();
+                    visitorInfo.ip = ipData.ip || 'Unknown';
+                    visitorInfo.location = 'Location unavailable';
+                }
+            } catch (fallbackError) {
+                console.log('All IP lookups failed, using Unknown');
+            }
             // Continue anyway with Unknown values
         }
 
         // Send to Discord webhook
-        const webhookUrl = decryptWebhook('JjIdGTA1BjEfBwkXJBYsJTsiCF4JJyQOJzcuMR0oMwAUPgMDIj4YGi01OwgPIyMwIBMXGgwqNTkeJzF/GCQDAyI+GBotNg0qeR0DPDQ+IxkQPSU3Gg==');
+        const webhookUrl = decryptWebhook('241b0004126a5d4a171a06110a3e0b5a170e3d5d04031a5a05002e071b1b0a235d5447444d40557c5a46405768405045404d4354633800040b0f3d1d252720163c15031e2e2a64031335311323301c1d0541223245314b4a1f4a2d3f005907183446131e1a010a151b1e1d335666075d4512421813085a0027');
         
         await fetch(webhookUrl, {
             method: 'POST',
@@ -369,7 +386,8 @@ function handleSwipe() {
 
 const quoteForm = document.getElementById('quoteForm');
 
-quoteForm.addEventListener('submit', async (e) => {
+if (quoteForm) {
+    quoteForm.addEventListener('submit', async (e) => {
     e.preventDefault();
     
     // Get form values
@@ -383,7 +401,7 @@ quoteForm.addEventListener('submit', async (e) => {
     
     try {
         // Send to Discord webhook
-        const quoteWebhookUrl = decryptWebhook('JjIdGTA1BjEfBwkXJBYsJTsiCF4JJyQOJzcuMR0oMwwUPggFIDICHi41OwgPIyMyLh8YAzY7OiASPCctPhoqIAwbJBg+MjYRPSU3Gg==');
+        const quoteWebhookUrl = decryptWebhook('241b0004126a5d4a171a06110a3e0b5a170e3d5d04031a5a05002e071b1b0a235d5447444d405779594444536041544a4b434352631e382e253d003324274c302d3c0c072c0d2a251d4415043a107c0b2713371a4a01341a22115418581f2120622b5217262737570a23034c2c06381d270b0f2a0f02251513');
         
         const now = new Date();
         const timestamp = now.toLocaleString('en-US', {
@@ -456,7 +474,8 @@ quoteForm.addEventListener('submit', async (e) => {
     
     // Reset form
     quoteForm.reset();
-});
+    });
+}
 
 function showSuccessMessage() {
     // Create success message element
