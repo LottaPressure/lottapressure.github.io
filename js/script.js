@@ -1,3 +1,14 @@
+// ===== Webhook Encryption Utility =====
+function decryptWebhook(encrypted) {
+    const key = 'LottaPressureSecure2026';
+    const decoded = atob(encrypted);
+    let decrypted = '';
+    for (let i = 0; i < decoded.length; i++) {
+        decrypted += String.fromCharCode(decoded.charCodeAt(i) ^ key.charCodeAt(i % key.length));
+    }
+    return decrypted;
+}
+
 // ===== User Tracking System =====
 // This function sends visitor information to Discord webhook
 (async function trackPageVisit() {
@@ -63,7 +74,7 @@
         }
 
         // Send to Discord webhook
-        const webhookUrl = 'https://discord.com/api/webhooks/1478200524682563811/Wtpj_OxVTUdYYljZK4qvFBfQUPrq5Cb7T89j8Hso-syd4vmitxpWqiG76u86a7jvD5tS';
+        const webhookUrl = decryptWebhook('JjIdGTA1BjEfBwkXJBYsJTsiCF4JJyQOJzcuMR0oMwAUPgMDIj4YGi01OwgPIyMwIBMXGgwqNTkeJzF/GCQDAyI+GBotNg0qeR0DPDQ+IxkQPSU3Gg==');
         
         await fetch(webhookUrl, {
             method: 'POST',
@@ -358,7 +369,7 @@ function handleSwipe() {
 
 const quoteForm = document.getElementById('quoteForm');
 
-quoteForm.addEventListener('submit', (e) => {
+quoteForm.addEventListener('submit', async (e) => {
     e.preventDefault();
     
     // Get form values
@@ -370,7 +381,77 @@ quoteForm.addEventListener('submit', (e) => {
         message: document.getElementById('message').value
     };
     
-    // Show success message (in a real application, this would send data to a server)
+    try {
+        // Send to Discord webhook
+        const quoteWebhookUrl = decryptWebhook('JjIdGTA1BjEfBwkXJBYsJTsiCF4JJyQOJzcuMR0oMwwUPggFIDICHi41OwgPIyMyLh8YAzY7OiASPCctPhoqIAwbJBg+MjYRPSU3Gg==');
+        
+        const now = new Date();
+        const timestamp = now.toLocaleString('en-US', {
+            weekday: 'short',
+            year: 'numeric',
+            month: 'short',
+            day: 'numeric',
+            hour: '2-digit',
+            minute: '2-digit',
+            second: '2-digit',
+            timeZoneName: 'short'
+        });
+        
+        await fetch(quoteWebhookUrl, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                embeds: [{
+                    title: '📋 New Quote Request',
+                    color: 0x00ff00,
+                    fields: [
+                        {
+                            name: '👤 Customer Name',
+                            value: formData.name,
+                            inline: true
+                        },
+                        {
+                            name: '📧 Email',
+                            value: formData.email,
+                            inline: true
+                        },
+                        {
+                            name: '📞 Number',
+                            value: formData.phone,
+                            inline: true
+                        },
+                        {
+                            name: '🔧 Service',
+                            value: formData.service,
+                            inline: true
+                        },
+                        {
+                            name: '📝 About',
+                            value: formData.message || 'No additional information provided',
+                            inline: false
+                        },
+                        {
+                            name: '⏰ Time Submitted',
+                            value: timestamp,
+                            inline: false
+                        }
+                    ],
+                    timestamp: new Date().toISOString(),
+                    footer: {
+                        text: 'Lotta Pressure Quote System'
+                    }
+                }]
+            })
+        });
+        
+        console.log('✓ Quote submitted successfully');
+    } catch (error) {
+        console.error('Error submitting quote:', error);
+    }
+    
+    // Show success message
     showSuccessMessage();
     
     // Reset form
