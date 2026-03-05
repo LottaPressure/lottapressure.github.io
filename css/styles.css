@@ -5,6 +5,13 @@
     box-sizing: border-box;
 }
 
+@font-face {
+    font-family: 'Barbara';
+    src: url('../fonts/BARABARA-final.otf') format('opentype');
+    font-weight: normal;
+    font-style: normal;
+}
+
 :root {
     --fire-dragon: #f87102;
     --too-blue: #0289f8;
@@ -93,6 +100,26 @@ body {
 
 .logo-img:hover {
     transform: scale(1.05);
+}
+
+.logo-text {
+    font-family: 'Barbara', 'Poppins', sans-serif;
+    font-size: 2.5rem;
+    font-weight: normal;
+    line-height: 1;
+    transition: transform 0.3s ease;
+}
+
+.logo-text:hover {
+    transform: scale(1.05);
+}
+
+.logo-lotta {
+    color: var(--fire-dragon);
+}
+
+.logo-pressure {
+    color: var(--too-blue);
 }
 
 .nav-menu {
@@ -232,12 +259,22 @@ body {
 }
 
 .hero-title {
-    font-size: 4rem;
-    font-weight: 700;
+    font-size: 6rem;
+    font-weight: normal;
+    font-family: 'Barbara', 'Poppins', sans-serif;
     color: var(--white);
     margin-bottom: 1rem;
     animation: liquidFillReveal 2.5s ease 1.2s both;
     text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7);
+    line-height: 1.2;
+}
+
+.hero-lotta {
+    color: var(--fire-dragon);
+}
+
+.hero-pressure {
+    color: var(--too-blue);
 }
 
 @keyframes liquidFillReveal {
@@ -1208,7 +1245,9 @@ body {
     }
     
     .hero-title {
-        font-size: 2.5rem;
+        font-size: 3.5rem;
+        font-family: 'Barbara', 'Poppins', sans-serif;
+        font-weight: normal;
         line-height: 1.2;
         margin-bottom: 1.5rem;
     }
@@ -1457,6 +1496,10 @@ body {
         height: 40px;
     }
     
+    .logo-text {
+        font-size: 1.8rem;
+    }
+    
     .hamburger {
         padding: 10px;
         grid-template-columns: repeat(3, 7px);
@@ -1474,7 +1517,9 @@ body {
     }
     
     .hero-title {
-        font-size: 1.8rem;
+        font-size: 2.5rem;
+        font-family: 'Barbara', 'Poppins', sans-serif;
+        font-weight: normal;
         line-height: 1.2;
     }
 
@@ -1705,7 +1750,9 @@ body {
 /* Extra Small Devices */
 @media (max-width: 360px) {
     .hero-title {
-        font-size: 1.6rem;
+        font-size: 2rem;
+        font-family: 'Barbara', 'Poppins', sans-serif;
+        font-weight: normal;
     }
     
     .hero-subtitle {
