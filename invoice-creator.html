@@ -305,12 +305,12 @@
             <div class="invoice-form">
                 <!-- Company Information (Pre-filled) -->
                 <div class="company-section">
-                    <h2>Lotta Pressure</h2>
+                    <h2><span style="color: #f87102;">LOTTA'</span><span style="color: #0289f8;"> PRESSURE</span></h2>
                     <div class="company-info">
                         <p><strong>Lawrenceburgs #1 Most Trusted Professional Power Washing Service</strong></p>
                         <p>Serving all of Lawrenceburg</p>
                         <p>Phone: (502) 598-9591</p>
-                        <p>Email: example@example.com</p>
+                        <p>Email: lottapressure5@gmail.com</p>
                     </div>
                 </div>
 
@@ -560,20 +560,26 @@
             const { jsPDF } = window.jspdf;
             const doc = new jsPDF();
 
-            // Company Header
-            doc.setFillColor(248, 113, 2); // Fire dragon color
+            // Company Header background
+            doc.setFillColor(245, 245, 245); // Light gray background
             doc.rect(0, 0, 210, 35, 'F');
             
-            doc.setTextColor(255, 255, 255);
+            // Company Name with brand colors
             doc.setFontSize(24);
             doc.setFont(undefined, 'bold');
-            doc.text('Lotta Pressure', 15, 15);
+            // "LOTTA'" in orange
+            doc.setTextColor(248, 113, 2); // Fire dragon color #f87102
+            doc.text("LOTTA'", 15, 15);
+            // "PRESSURE" in blue
+            doc.setTextColor(2, 137, 248); // Too blue color #0289f8
+            doc.text(" PRESSURE", 43, 15);
             
             doc.setFontSize(10);
             doc.setFont(undefined, 'normal');
+            doc.setTextColor(51, 51, 51); // Dark gray for regular text
             doc.text('Lawrenceburgs #1 Most Trusted Professional Power Washing Service', 15, 22);
             doc.text('Serving all of Lawrenceburg', 15, 27);
-            doc.text('Phone: (502) 598-9591 | Email: example@example.com', 15, 32);
+            doc.text('Phone: (502) 598-9591 | Email: lottapressure5@gmail.com', 15, 32);
 
             // Invoice Title
             doc.setTextColor(51, 51, 51);
@@ -675,7 +681,7 @@
             doc.setFontSize(8);
             doc.setTextColor(100, 100, 100);
             doc.text('Thank you for your business!', 105, 280, { align: 'center' });
-            doc.text('For questions about this invoice, please contact us at example@example.com', 105, 285, { align: 'center' });
+            doc.text('For questions about this invoice, please contact us at lottapressure5@gmail.com', 105, 285, { align: 'center' });
 
             // Save PDF
             doc.save(`Invoice_${invoiceNumber}_${customerName.replace(/\s+/g, '_')}.pdf`);
