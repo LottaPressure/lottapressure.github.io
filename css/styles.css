@@ -1250,6 +1250,7 @@ body {
         font-weight: normal;
         line-height: 1.2;
         margin-bottom: 1.5rem;
+        padding-top: 0.5rem;
     }
 
     .hero-subtitle {
@@ -1521,6 +1522,7 @@ body {
         font-family: 'Barbara', 'Poppins', sans-serif;
         font-weight: normal;
         line-height: 1.2;
+        padding-top: 0.5rem;
     }
 
     .hero-subtitle {
@@ -1753,6 +1755,7 @@ body {
         font-size: 2rem;
         font-family: 'Barbara', 'Poppins', sans-serif;
         font-weight: normal;
+        padding-top: 0.5rem;
     }
     
     .hero-subtitle {
