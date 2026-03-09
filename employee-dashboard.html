@@ -349,16 +349,16 @@
     <nav class="navbar" id="navbar">
         <div class="container">
             <div class="nav-brand">
-                <a href="index.html">
+                <a href="/">
                     <img src="images/logosquare.webp" alt="Lotta Pressure Logo" class="logo-img">
                 </a>
             </div>
             <ul class="nav-menu">
-                <li><a href="index.html#home" class="nav-link">Home</a></li>
-                <li><a href="index.html#services" class="nav-link">Services</a></li>
-                <li><a href="index.html#discount" class="nav-link">Military Discount</a></li>
-                <li><a href="index.html#reviews" class="nav-link">Reviews</a></li>
-                <li><a href="index.html#contact" class="nav-link">Contact</a></li>
+                <li><a href="/#home" class="nav-link">Home</a></li>
+                <li><a href="/#services" class="nav-link">Services</a></li>
+                <li><a href="/#discount" class="nav-link">Military Discount</a></li>
+                <li><a href="/#reviews" class="nav-link">Reviews</a></li>
+                <li><a href="/#contact" class="nav-link">Contact</a></li>
             </ul>
             <div class="hamburger">
                 <span></span>
@@ -410,7 +410,7 @@
                     <div class="card-content">
                         <div class="quick-links">
                             <a href="https://docs.google.com/spreadsheets/d/1-D8t656PaK6Nhh2HVfKih-sTh_ITt5deXy_wtTk_WkQ/edit?usp=sharing" target="_blank" class="quick-link">📅 View Schedule</a>
-                            <a href="timecard.html" class="quick-link">⏰ Timecard</a>
+                            <a href="timecard" class="quick-link">⏰ Timecard</a>
                         </div>
                     </div>
                 </div>
@@ -457,7 +457,7 @@
                     </h2>
                     <div class="card-content">
                         <div class="quick-links">
-                            <a href="invoice-creator.html" class="quick-link">📄 Invoice Creator</a>
+                            <a href="invoice-creator" class="quick-link">📄 Invoice Creator</a>
                         </div>
                     </div>
                 </div>
@@ -513,10 +513,10 @@
                 <div class="footer-section">
                     <h4>Quick Links</h4>
                     <ul>
-                        <li><a href="index.html#home">Home</a></li>
-                        <li><a href="index.html#services">Services</a></li>
-                        <li><a href="index.html#reviews">Reviews</a></li>
-                        <li><a href="index.html#contact">Contact</a></li>
+                        <li><a href="/#home">Home</a></li>
+                        <li><a href="/#services">Services</a></li>
+                        <li><a href="/#reviews">Reviews</a></li>
+                        <li><a href="/#contact">Contact</a></li>
                     </ul>
                 </div>
                 <div class="footer-section">
@@ -546,7 +546,7 @@
         // Check if user is logged in (simple check - enhance with proper session management)
         if (!sessionStorage.getItem('employeeLoggedIn')) {
             // Redirect to login if not logged in
-            window.location.href = 'login.html';
+            window.location.href = 'login';
         }
 
         // Display username if available
@@ -558,7 +558,7 @@
         function logout() {
             sessionStorage.removeItem('employeeLoggedIn');
             sessionStorage.removeItem('employeeUsername');
-            window.location.href = 'login.html';
+            window.location.href = 'login';
         }
 
         // Inactivity Timeout System
@@ -705,7 +705,7 @@
             sessionStorage.setItem('datalinkAccess', 'granted');
             sessionStorage.setItem('datalinkAccessTime', Date.now());
             // Navigate to DataLink
-            window.location.href = 'datalink.html';
+            window.location.href = 'datalink';
         }
 
         // Connect USB Drive

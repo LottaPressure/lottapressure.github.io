@@ -195,16 +195,16 @@
     <nav class="navbar" id="navbar">
         <div class="container">
             <div class="nav-brand">
-                <a href="index.html">
+                <a href="/">
                     <img src="images/logosquare.webp" alt="Lotta Pressure Logo" class="logo-img">
                 </a>
             </div>
             <ul class="nav-menu">
-                <li><a href="index.html#home" class="nav-link">Home</a></li>
-                <li><a href="index.html#services" class="nav-link">Services</a></li>
-                <li><a href="index.html#discount" class="nav-link">Military Discount</a></li>
-                <li><a href="index.html#reviews" class="nav-link">Reviews</a></li>
-                <li><a href="index.html#contact" class="nav-link">Contact</a></li>
+                <li><a href="/#home" class="nav-link">Home</a></li>
+                <li><a href="/#services" class="nav-link">Services</a></li>
+                <li><a href="/#discount" class="nav-link">Military Discount</a></li>
+                <li><a href="/#reviews" class="nav-link">Reviews</a></li>
+                <li><a href="/#contact" class="nav-link">Contact</a></li>
             </ul>
             <div class="hamburger">
                 <span></span>
@@ -262,7 +262,7 @@
             </form>
 
             <div class="back-link">
-                <a href="index.html">← Back to Home</a>
+                <a href="/">← Back to Home</a>
             </div>
         </div>
     </section>
@@ -326,7 +326,7 @@
                     sessionStorage.setItem('employeeUsername', username);
                     
                     // Redirect to employee dashboard
-                    window.location.href = 'employee-dashboard.html';
+                    window.location.href = 'employee-dashboard';
                 } else {
                     // Add delay to prevent brute force
                     await new Promise(resolve => setTimeout(resolve, 1000));

@@ -526,9 +526,9 @@
                 <img src="images/logosquare.webp" alt="Lotta Pressure Logo" class="logo-img">
             </div>
             <ul class="nav-menu">
-                <li><a href="employee-dashboard.html" class="nav-link">Dashboard</a></li>
-                <li><a href="invoice-creator.html" class="nav-link">Invoice Creator</a></li>
-                <li><a href="timecard.html" class="nav-link">Timecard</a></li>
+                <li><a href="employee-dashboard" class="nav-link">Dashboard</a></li>
+                <li><a href="invoice-creator" class="nav-link">Invoice Creator</a></li>
+                <li><a href="timecard" class="nav-link">Timecard</a></li>
             </ul>
             <div class="hamburger">
                 <span></span>
@@ -552,7 +552,7 @@
                     <span id="headerIcon">💾</span>
                     DataLink
                 </h1>
-                <a href="employee-dashboard.html" class="back-button">← Back to Dashboard</a>
+                <a href="employee-dashboard" class="back-button">← Back to Dashboard</a>
             </div>
 
             <!-- Main Content -->
@@ -568,7 +568,7 @@
                 <div id="loadSection" style="text-align: center; display: none;">
                     <p style="color: #6c757d; font-size: 1.1em; margin-top: 20px;">
                         No database connected<br>
-                        <a href="employee-dashboard.html" style="color: #667eea; text-decoration: none; font-weight: 600;">
+                        <a href="employee-dashboard" style="color: #667eea; text-decoration: none; font-weight: 600;">
                             ← Return to Dashboard to connect USB
                         </a>
                     </p>
@@ -618,7 +618,7 @@
         // Check if user is logged in
         const loggedInUsername = sessionStorage.getItem('employeeUsername');
         if (!loggedInUsername) {
-            window.location.href = 'login.html';
+            window.location.href = 'login';
         }
 
         // Check if access was granted from dashboard
@@ -630,7 +630,7 @@
         if (!datalinkAccess || !accessTime || (currentTime - parseInt(accessTime)) > accessTimeout) {
             // Access denied or expired - redirect to dashboard
             alert('Please access DataLink from the dashboard module.');
-            window.location.href = 'employee-dashboard.html';
+            window.location.href = 'employee-dashboard';
         }
 
         let customerDatabase = [];
@@ -684,7 +684,7 @@
         // Reload database - redirect to dashboard
         function reloadDatabase() {
             if (confirm('Reconnect USB drive from the dashboard?')) {
-                window.location.href = 'employee-dashboard.html';
+                window.location.href = 'employee-dashboard';
             }
         }
 

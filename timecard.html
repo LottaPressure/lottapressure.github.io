@@ -255,9 +255,9 @@
                 <img src="images/logosquare.webp" alt="Lotta Pressure Logo" class="logo-img">
             </div>
             <ul class="nav-menu">
-                <li><a href="employee-dashboard.html" class="nav-link">Dashboard</a></li>
-                <li><a href="invoice-creator.html" class="nav-link">Invoice Creator</a></li>
-                <li><a href="timecard.html" class="nav-link">Timecard</a></li>
+                <li><a href="employee-dashboard" class="nav-link">Dashboard</a></li>
+                <li><a href="invoice-creator" class="nav-link">Invoice Creator</a></li>
+                <li><a href="timecard" class="nav-link">Timecard</a></li>
             </ul>
             <div class="hamburger">
                 <span></span>
@@ -278,7 +278,7 @@
             <!-- Page Header -->
             <div class="page-header">
                 <h1>Timecard</h1>
-                <a href="employee-dashboard.html" class="back-button">← Back to Dashboard</a>
+                <a href="employee-dashboard" class="back-button">← Back to Dashboard</a>
             </div>
 
             <!-- Main Content -->
@@ -345,7 +345,7 @@
         const loggedInUsername = sessionStorage.getItem('employeeUsername');
         if (!loggedInUsername) {
             // Redirect to login if not authenticated
-            window.location.href = 'login.html';
+            window.location.href = 'login';
         }
 
         // Display the logged-in username
