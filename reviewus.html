@@ -1,0 +1,591 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes">
+    <meta name="description" content="Share your experience with Lotta' Pressure - Lawrenceburg's #1 Pressure Washing Service">
+    <meta name="theme-color" content="#f87102">
+    <link rel="icon" type="image/webp" href="images/logosquare.webp">
+    <title>Leave a Review - Lotta' Pressure</title>
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <style>
+        .review-section {
+            min-height: 100vh;
+            padding: 120px 20px 60px;
+            background: linear-gradient(135deg, #f8f9fa 0%, #ffffff 100%);
+        }
+
+        .review-container {
+            max-width: 700px;
+            margin: 0 auto;
+            background: white;
+            padding: 40px;
+            border-radius: 20px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+        }
+
+        .review-header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .review-title {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 10px;
+        }
+
+        .review-lotta {
+            color: var(--fire-dragon);
+        }
+
+        .review-pressure {
+            color: var(--too-blue);
+        }
+
+        .review-subtitle {
+            color: var(--text-gray);
+            font-size: 1.1rem;
+        }
+
+        .form-group {
+            margin-bottom: 30px;
+        }
+
+        .form-label {
+            display: block;
+            font-weight: 600;
+            margin-bottom: 10px;
+            color: var(--dark-gray);
+            font-size: 1rem;
+        }
+
+        .form-input {
+            width: 100%;
+            padding: 15px;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            font-family: 'Poppins', sans-serif;
+            font-size: 1rem;
+            transition: border-color 0.3s ease;
+        }
+
+        .form-input:focus {
+            outline: none;
+            border-color: var(--fire-dragon);
+        }
+
+        .form-textarea {
+            min-height: 150px;
+            resize: vertical;
+        }
+
+        .file-input-wrapper {
+            position: relative;
+            display: inline-block;
+            width: 100%;
+        }
+
+        .file-input-label {
+            display: block;
+            padding: 15px;
+            background: var(--light-gray);
+            border: 2px dashed #e0e0e0;
+            border-radius: 10px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .file-input-label:hover {
+            border-color: var(--fire-dragon);
+            background: rgba(248, 113, 2, 0.05);
+        }
+
+        .file-input {
+            position: absolute;
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+
+        .file-preview {
+            margin-top: 15px;
+            text-align: center;
+        }
+
+        .file-preview img {
+            max-width: 200px;
+            max-height: 200px;
+            border-radius: 10px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .star-rating {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+            font-size: 3rem;
+        }
+
+        .star {
+            cursor: pointer;
+            color: #ddd;
+            transition: all 0.2s ease;
+            user-select: none;
+        }
+
+        .star:hover,
+        .star.active {
+            color: #ffc107;
+            transform: scale(1.1);
+        }
+
+        .submit-button {
+            width: 100%;
+            padding: 18px;
+            background: linear-gradient(135deg, var(--fire-dragon) 0%, #ff8c3a 100%);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            font-family: 'Poppins', sans-serif;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(248, 113, 2, 0.3);
+        }
+
+        .submit-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(248, 113, 2, 0.4);
+        }
+
+        .submit-button:disabled {
+            background: #cccccc;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+
+        .success-message,
+        .error-message {
+            padding: 15px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            text-align: center;
+            font-weight: 600;
+            display: none;
+        }
+
+        .success-message {
+            background: #d4edda;
+            color: #155724;
+            border: 2px solid #c3e6cb;
+        }
+
+        .error-message {
+            background: #f8d7da;
+            color: #721c24;
+            border: 2px solid #f5c6cb;
+        }
+
+        .back-link {
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        .back-link a {
+            color: var(--too-blue);
+            text-decoration: none;
+            font-weight: 600;
+            transition: color 0.3s ease;
+        }
+
+        .back-link a:hover {
+            color: var(--fire-dragon);
+        }
+
+        @media (max-width: 768px) {
+            .review-container {
+                padding: 30px 20px;
+            }
+
+            .review-title {
+                font-size: 2rem;
+            }
+
+            .star-rating {
+                font-size: 2.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation Bar -->
+    <nav class="navbar" id="navbar">
+        <div class="container">
+            <div class="nav-brand">
+                <a href="index.html" style="text-decoration: none;">
+                    <div class="logo-text">
+                        <span class="logo-lotta">LOTTA'  </span><span class="logo-pressure">PRESSURE</span>
+                    </div>
+                </a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Review Section -->
+    <section class="review-section">
+        <div class="review-container">
+            <div class="review-header">
+                <h1 class="review-title">
+                    <span class="review-lotta">Share Your</span>
+                    <span class="review-pressure"> Experience</span>
+                </h1>
+                <p class="review-subtitle">We'd love to hear about your experience with our service!</p>
+            </div>
+
+            <div class="success-message" id="successMessage">
+                Thank you for your review! We appreciate your feedback.
+            </div>
+
+            <div class="error-message" id="errorMessage">
+                Something went wrong. Please try again.
+            </div>
+
+            <form id="reviewForm">
+                <div class="form-group">
+                    <label class="form-label" for="reviewerName">Your Name *</label>
+                    <input 
+                        type="text" 
+                        id="reviewerName" 
+                        class="form-input" 
+                        placeholder="Enter your name"
+                        required
+                    >
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label" for="reviewerPhoto">Your Photo (Optional)</label>
+                    <div class="file-input-wrapper">
+                        <input 
+                            type="file" 
+                            id="reviewerPhoto" 
+                            class="file-input"
+                            accept="image/*"
+                        >
+                        <label for="reviewerPhoto" class="file-input-label">
+                            📷 Click to upload your photo
+                        </label>
+                    </div>
+                    <div class="file-preview" id="photoPreview"></div>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Rating *</label>
+                    <div class="star-rating" id="starRating">
+                        <span class="star" data-rating="1">★</span>
+                        <span class="star" data-rating="2">★</span>
+                        <span class="star" data-rating="3">★</span>
+                        <span class="star" data-rating="4">★</span>
+                        <span class="star" data-rating="5">★</span>
+                    </div>
+                    <input type="hidden" id="ratingValue" required>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label" for="reviewComments">Your Review *</label>
+                    <textarea 
+                        id="reviewComments" 
+                        class="form-input form-textarea" 
+                        placeholder="Tell us about your experience..."
+                        required
+                    ></textarea>
+                </div>
+
+                <button type="submit" class="submit-button" id="submitButton">
+                    Submit Review
+                </button>
+            </form>
+
+            <div class="back-link">
+                <a href="index.html">← Back to Home</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h3>Lotta Pressure</h3>
+                    <p>Your trusted partner for residential pressure washing services.</p>
+                </div>
+                <div class="footer-section">
+                    <h4>Quick Links</h4>
+                    <ul>
+                        <li><a href="index.html">Home</a></li>
+                        <li><a href="index.html#services">Services</a></li>
+                        <li><a href="index.html#reviews">Reviews</a></li>
+                        <li><a href="index.html#contact">Contact</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4>Services</h4>
+                    <ul>
+                        <li>House Washing</li>
+                        <li>Driveway Cleaning</li>
+                        <li>Deck Restoration</li>
+                        <li>Window Cleaning</li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4>Connect</h4>
+                    <div class="social-links">
+                        <a href="https://www.facebook.com/profile.php?id=61583785291622" class="social-link">Facebook</a>
+                    </div>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2026 Lotta Pressure. All rights reserved.</p>
+                <a href="login" class="employee-login-btn">Employee Login</a>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Star rating functionality
+        const stars = document.querySelectorAll('.star');
+        const ratingValue = document.getElementById('ratingValue');
+        let selectedRating = 0;
+
+        stars.forEach(star => {
+            star.addEventListener('click', function() {
+                selectedRating = parseInt(this.getAttribute('data-rating'));
+                ratingValue.value = selectedRating;
+                updateStars();
+            });
+
+            star.addEventListener('mouseenter', function() {
+                const hoverRating = parseInt(this.getAttribute('data-rating'));
+                highlightStars(hoverRating);
+            });
+        });
+
+        document.getElementById('starRating').addEventListener('mouseleave', function() {
+            updateStars();
+        });
+
+        function highlightStars(rating) {
+            stars.forEach((star, index) => {
+                if (index < rating) {
+                    star.classList.add('active');
+                } else {
+                    star.classList.remove('active');
+                }
+            });
+        }
+
+        function updateStars() {
+            highlightStars(selectedRating);
+        }
+
+        // Photo preview functionality
+        const photoInput = document.getElementById('reviewerPhoto');
+        const photoPreview = document.getElementById('photoPreview');
+        let photoBase64 = '';
+
+        photoInput.addEventListener('change', function(e) {
+            const file = e.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(event) {
+                    photoBase64 = event.target.result;
+                    photoPreview.innerHTML = `<img src="${photoBase64}" alt="Preview">`;
+                };
+                reader.readAsDataURL(file);
+            }
+        });
+
+        // Webhook URL obfuscation
+        function getWebhookUrl() {
+            const parts = [
+                'aHR0cHM6Ly9kaXNjb3JkLmNvbS9hcGkvd2ViaG9va3Mv',
+                'MTQ4MDQ0MDkwMzM3NzM1OTA0OC9RanZnWnU2X1lv',
+                'WTFQTWZwUXhQbVpJTkNTNUUwcko5RjhsR0Ny',
+                'VkZYMGdPODlJV1dqal9waXl4ZTRhckROdzFjUFQwcw=='
+            ];
+            return atob(parts.join(''));
+        }
+
+        // Form submission
+        const form = document.getElementById('reviewForm');
+        const submitButton = document.getElementById('submitButton');
+        const successMessage = document.getElementById('successMessage');
+        const errorMessage = document.getElementById('errorMessage');
+
+        // Check if user has submitted recently on page load
+        function checkSubmissionCooldown() {
+            const lastSubmission = localStorage.getItem('lastReviewSubmission');
+            if (lastSubmission) {
+                const timeSinceLastSubmission = Date.now() - parseInt(lastSubmission);
+                const hoursRemaining = Math.ceil((86400000 - timeSinceLastSubmission) / 3600000); // 24 hours in ms
+                
+                if (timeSinceLastSubmission < 86400000) { // 24 hours
+                    submitButton.disabled = true;
+                    submitButton.textContent = `Please wait ${hoursRemaining}h to submit again`;
+                    errorMessage.textContent = `You can submit another review in ${hoursRemaining} hour(s). Thank you for your patience!`;
+                    errorMessage.style.display = 'block';
+                    return false;
+                }
+            }
+            return true;
+        }
+
+        // Check on page load
+        checkSubmissionCooldown();
+
+        form.addEventListener('submit', async function(e) {
+            e.preventDefault();
+
+            // Hide previous messages
+            successMessage.style.display = 'none';
+            errorMessage.style.display = 'none';
+
+            // Check 24-hour cooldown
+            if (!checkSubmissionCooldown()) {
+                return;
+            }
+
+            // Validate rating
+            if (!selectedRating) {
+                alert('Please select a star rating!');
+                return;
+            }
+
+            // Get form values
+            const name = document.getElementById('reviewerName').value;
+            const comments = document.getElementById('reviewComments').value;
+            const starEmojis = '⭐'.repeat(selectedRating);
+
+            // Disable submit button
+            submitButton.disabled = true;
+            submitButton.textContent = 'Submitting...';
+
+            let submissionSuccess = false;
+
+            // Prepare Discord embed
+            const embed = {
+                title: '⭐ New Customer Review',
+                color: 0xf87102,
+                fields: [
+                    {
+                        name: '👤 Customer Name',
+                        value: name,
+                        inline: false
+                    },
+                    {
+                        name: '⭐ Rating',
+                        value: `${starEmojis} (${selectedRating}/5)`,
+                        inline: false
+                    },
+                    {
+                        name: '💬 Review',
+                        value: comments,
+                        inline: false
+                    }
+                ],
+                timestamp: new Date().toISOString(),
+                footer: {
+                    text: 'Lotta\' Pressure Reviews'
+                }
+            };
+
+            // Add photo if provided
+            if (photoBase64) {
+                embed.thumbnail = {
+                    url: 'attachment://reviewer_photo.png'
+                };
+            }
+
+            try {
+                const webhookUrl = getWebhookUrl();
+                
+                // If there's a photo, we need to send it as a multipart form data
+                if (photoBase64) {
+                    // Convert base64 to blob
+                    const imageData = photoBase64.split(',')[1];
+                    const byteCharacters = atob(imageData);
+                    const byteNumbers = new Array(byteCharacters.length);
+                    for (let i = 0; i < byteCharacters.length; i++) {
+                        byteNumbers[i] = byteCharacters.charCodeAt(i);
+                    }
+                    const byteArray = new Uint8Array(byteNumbers);
+                    const blob = new Blob([byteArray], { type: 'image/png' });
+
+                    const formData = new FormData();
+                    formData.append('file', blob, 'reviewer_photo.png');
+                    formData.append('payload_json', JSON.stringify({
+                        embeds: [embed]
+                    }));
+
+                    const response = await fetch(webhookUrl, {
+                        method: 'POST',
+                        body: formData
+                    });
+
+                    if (!response.ok) throw new Error('Failed to send review');
+                } else {
+                    // Send without photo
+                    const response = await fetch(webhookUrl, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify({
+                            embeds: [embed]
+                        })
+                    });
+
+                    if (!response.ok) throw new Error('Failed to send review');
+                }
+
+                // Success
+                submissionSuccess = true;
+                localStorage.setItem('lastReviewSubmission', Date.now().toString());
+                successMessage.style.display = 'block';
+                form.reset();
+                photoPreview.innerHTML = '';
+                photoBase64 = '';
+                selectedRating = 0;
+                ratingValue.value = '';
+                updateStars();
+
+                // Update button to show cooldown
+                submitButton.disabled = true;
+                submitButton.textContent = 'Please wait 24h to submit again';
+
+                // Scroll to success message
+                successMessage.scrollIntoView({ behavior: 'smooth', block: 'center' });
+
+            } catch (error) {
+                console.error('Error submitting review:', error);
+                errorMessage.textContent = 'Something went wrong. Please try again.';
+                errorMessage.style.display = 'block';
+                errorMessage.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            } finally {
+                // Only re-enable submit button if submission failed
+                if (!submissionSuccess) {
+                    submitButton.disabled = false;
+                    submitButton.textContent = 'Submit Review';
+                }
+            }
+        });
+    </script>
+</body>
+</html>
