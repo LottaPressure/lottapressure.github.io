@@ -278,16 +278,20 @@ function prevSlide() {
     showSlide(currentSlide - 1);
 }
 
-// Event listeners for navigation
-nextBtn.addEventListener('click', () => {
-    nextSlide();
-    resetAutoPlay();
-});
+// Event listeners for navigation (only if elements exist)
+if (nextBtn) {
+    nextBtn.addEventListener('click', () => {
+        nextSlide();
+        resetAutoPlay();
+    });
+}
 
-prevBtn.addEventListener('click', () => {
-    prevSlide();
-    resetAutoPlay();
-});
+if (prevBtn) {
+    prevBtn.addEventListener('click', () => {
+        prevSlide();
+        resetAutoPlay();
+    });
+}
 
 // Dot navigation
 dots.forEach((dot, index) => {
@@ -421,6 +425,7 @@ if (quoteForm) {
                 'Content-Type': 'application/json',
             },
             body: JSON.stringify({
+                content: '<@1249846432626642960>',
                 embeds: [{
                     title: '📋 New Quote Request',
                     color: 0x00ff00,

@@ -341,7 +341,6 @@
                         <li>House Washing</li>
                         <li>Driveway Cleaning</li>
                         <li>Deck Restoration</li>
-                        <li>Window Cleaning</li>
                     </ul>
                 </div>
                 <div class="footer-section">
@@ -531,6 +530,7 @@
                     const formData = new FormData();
                     formData.append('file', blob, 'reviewer_photo.png');
                     formData.append('payload_json', JSON.stringify({
+                        content: '<@1249846432626642960>',
                         embeds: [embed]
                     }));
 
@@ -548,6 +548,7 @@
                             'Content-Type': 'application/json'
                         },
                         body: JSON.stringify({
+                            content: '<@1249846432626642960>',
                             embeds: [embed]
                         })
                     });
