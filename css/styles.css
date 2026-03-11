@@ -981,6 +981,7 @@ body {
 .contact .container {
     position: relative;
     z-index: 2;
+    overflow-x: hidden;
 }
 
 .contact .section-title {
@@ -1007,8 +1008,14 @@ body {
     margin-bottom: 2rem;
 }
 
+.info-item > div {
+    flex: 1;
+    min-width: 0;
+}
+
 .info-icon {
     font-size: 2rem;
+    flex-shrink: 0;
 }
 
 .info-item h4 {
@@ -1018,6 +1025,25 @@ body {
 
 .info-item p {
     color: rgba(255, 255, 255, 0.9);
+}
+
+.map-container {
+    position: relative;
+    width: 100%;
+    max-width: 430px;
+    height: 240px;
+    margin-top: 10px;
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+.map-container iframe {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    border: 0;
 }
 
 .contact-form {
@@ -1457,6 +1483,17 @@ body {
         margin-bottom: 1.5rem;
     }
     
+    .map-container {
+        max-width: 100%;
+        height: 200px;
+        margin-left: 0;
+        margin-right: 0;
+    }
+    
+    .contact-info {
+        overflow-x: hidden;
+    }
+    
     .contact-form {
         padding: 1.5rem;
     }
@@ -1714,6 +1751,11 @@ body {
         font-size: 0.9rem;
     }
     
+    .map-container {
+        max-width: 100%;
+        height: 180px;
+    }
+    
     .contact-form {
         padding: 1.2rem;
     }
@@ -1779,6 +1821,24 @@ body {
     .cta-button {
         min-width: 160px;
         padding: 0.8rem 1.5rem;
+    }
+    
+    .map-container {
+        max-width: 100%;
+        height: 160px;
+    }
+    
+    .contact-form {
+        padding: 1rem;
+    }
+    
+    .form-group {
+        margin-bottom: 1rem;
+    }
+    
+    .submit-button {
+        padding: 0.85rem;
+        font-size: 0.9rem;
     }
 }
 
