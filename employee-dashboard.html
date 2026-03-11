@@ -532,15 +532,16 @@
             window.location.href = 'login';
         }
 
-        // Display username if available
-        const username = sessionStorage.getItem('employeeUsername');
-        if (username) {
-            document.querySelector('.dashboard-header h1').textContent = `👋 Welcome, ${username}`;
+        // Display employee name if available
+        const employeeName = sessionStorage.getItem('employeeName');
+        if (employeeName) {
+            document.querySelector('.dashboard-header h1').textContent = `👋 Welcome, ${employeeName}`;
         }
 
         function logout() {
             sessionStorage.removeItem('employeeLoggedIn');
             sessionStorage.removeItem('employeeUsername');
+            sessionStorage.removeItem('employeeName');
             window.location.href = 'login';
         }
 

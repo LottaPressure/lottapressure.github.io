@@ -205,19 +205,21 @@ window.addEventListener('scroll', () => {
 const hamburger = document.querySelector('.hamburger');
 const navMenu = document.querySelector('.nav-menu');
 
-hamburger.addEventListener('click', () => {
-    navMenu.classList.toggle('active');
-    
-    // Animate hamburger icon
-    hamburger.classList.toggle('active');
-});
+if (hamburger && navMenu) {
+    hamburger.addEventListener('click', () => {
+        navMenu.classList.toggle('active');
+        
+        // Animate hamburger icon
+        hamburger.classList.toggle('active');
+    });
 
-// Close mobile menu when clicking outside
-document.addEventListener('click', (e) => {
-    if (!e.target.closest('.navbar')) {
-        navMenu.classList.remove('active');
-    }
-});
+    // Close mobile menu when clicking outside
+    document.addEventListener('click', (e) => {
+        if (!e.target.closest('.navbar')) {
+            navMenu.classList.remove('active');
+        }
+    });
+}
 
 // Scroll Reveal Animation
 const revealElements = document.querySelectorAll('.service-item, .about-card');
@@ -237,102 +239,108 @@ window.addEventListener('scroll', revealOnScroll);
 revealOnScroll(); // Initial check
 
 // Reviews Carousel
-let currentSlide = 0;
 const slides = document.querySelectorAll('.review-slide');
 const dots = document.querySelectorAll('.dot');
 const prevBtn = document.querySelector('.carousel-prev');
 const nextBtn = document.querySelector('.carousel-next');
-let autoPlayInterval;
 
-function showSlide(index) {
-    // Wrap around
-    if (index >= slides.length) {
-        currentSlide = 0;
-    } else if (index < 0) {
-        currentSlide = slides.length - 1;
-    } else {
-        currentSlide = index;
+// Only initialize carousel if elements exist
+if (slides.length > 0 && dots.length > 0) {
+    let currentSlide = 0;
+    let autoPlayInterval;
+
+    function showSlide(index) {
+        // Wrap around
+        if (index >= slides.length) {
+            currentSlide = 0;
+        } else if (index < 0) {
+            currentSlide = slides.length - 1;
+        } else {
+            currentSlide = index;
+        }
+        
+        // Update slides
+        slides.forEach((slide, i) => {
+            slide.classList.remove('active', 'prev');
+            if (i === currentSlide) {
+                slide.classList.add('active');
+            } else if (i < currentSlide) {
+                slide.classList.add('prev');
+            }
+        });
+        
+        // Update dots
+        dots.forEach((dot, i) => {
+            dot.classList.toggle('active', i === currentSlide);
+        });
     }
-    
-    // Update slides
-    slides.forEach((slide, i) => {
-        slide.classList.remove('active', 'prev');
-        if (i === currentSlide) {
-            slide.classList.add('active');
-        } else if (i < currentSlide) {
-            slide.classList.add('prev');
+
+    function nextSlide() {
+        showSlide(currentSlide + 1);
+    }
+
+    function prevSlide() {
+        showSlide(currentSlide - 1);
+    }
+
+    // Event listeners for navigation (only if elements exist)
+    if (nextBtn) {
+        nextBtn.addEventListener('click', () => {
+            nextSlide();
+            resetAutoPlay();
+        });
+    }
+
+    if (prevBtn) {
+        prevBtn.addEventListener('click', () => {
+            prevSlide();
+            resetAutoPlay();
+        });
+    }
+
+    // Dot navigation
+    dots.forEach((dot, index) => {
+        dot.addEventListener('click', () => {
+            showSlide(index);
+            resetAutoPlay();
+        });
+    });
+
+    // Auto-play functionality
+    function startAutoPlay() {
+        autoPlayInterval = setInterval(nextSlide, 5000); // Change slide every 5 seconds
+    }
+
+    function stopAutoPlay() {
+        clearInterval(autoPlayInterval);
+    }
+
+    function resetAutoPlay() {
+        stopAutoPlay();
+        startAutoPlay();
+    }
+
+    // Start auto-play when page loads
+    startAutoPlay();
+
+    // Pause auto-play when hovering over carousel
+    const carousel = document.querySelector('.reviews-carousel');
+    if (carousel) {
+        carousel.addEventListener('mouseenter', stopAutoPlay);
+        carousel.addEventListener('mouseleave', startAutoPlay);
+    }
+
+    // Keyboard navigation
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'ArrowLeft') {
+            prevSlide();
+            resetAutoPlay();
+        } else if (e.key === 'ArrowRight') {
+            nextSlide();
+            resetAutoPlay();
         }
     });
-    
-    // Update dots
-    dots.forEach((dot, i) => {
-        dot.classList.toggle('active', i === currentSlide);
-    });
 }
-
-function nextSlide() {
-    showSlide(currentSlide + 1);
-}
-
-function prevSlide() {
-    showSlide(currentSlide - 1);
-}
-
-// Event listeners for navigation (only if elements exist)
-if (nextBtn) {
-    nextBtn.addEventListener('click', () => {
-        nextSlide();
-        resetAutoPlay();
-    });
-}
-
-if (prevBtn) {
-    prevBtn.addEventListener('click', () => {
-        prevSlide();
-        resetAutoPlay();
-    });
-}
-
-// Dot navigation
-dots.forEach((dot, index) => {
-    dot.addEventListener('click', () => {
-        showSlide(index);
-        resetAutoPlay();
-    });
-});
-
-// Auto-play functionality
-function startAutoPlay() {
-    autoPlayInterval = setInterval(nextSlide, 5000); // Change slide every 5 seconds
-}
-
-function stopAutoPlay() {
-    clearInterval(autoPlayInterval);
-}
-
-function resetAutoPlay() {
-    stopAutoPlay();
-    startAutoPlay();
-}
-
-// Start auto-play when page loads
-startAutoPlay();
-
-// Pause auto-play when hovering over carousel
-const carousel = document.querySelector('.reviews-carousel');
-carousel.addEventListener('mouseenter', stopAutoPlay);
-carousel.addEventListener('mouseleave', startAutoPlay);
-
-// Keyboard navigation
-document.addEventListener('keydown', (e) => {
-    if (e.key === 'ArrowLeft') {
-        prevSlide();
-        resetAutoPlay();
-    } else if (e.key === 'ArrowRight') {
-        nextSlide();
-        resetAutoPlay();
-    }
-});
 
 // ===== View More Services Toggle =====
 const viewMoreBtn = document.getElementById('viewMoreServices');

@@ -274,19 +274,36 @@
         // This is NOT secure for sensitive data. Use server-side authentication for production.
         
         // Credentials stored as SHA-256 hashes
-        // Valid login: username="lottapressure", password="123"
         const VALID_CREDENTIALS = {
-            'lottapressure': 'TEMP_HASH_WILL_BE_GENERATED',
+            'jowblob': 'TEMP_HASH_WILL_BE_GENERATED_1',
+            'bmarshall08': 'TEMP_HASH_WILL_BE_GENERATED_2',
+            'aagulex09': 'TEMP_HASH_WILL_BE_GENERATED_3',
+            'jerryeatsbeans': 'TEMP_HASH_WILL_BE_GENERATED_4'
         };
 
-        // Generate the hash for password "123" on page load
+        // Map usernames to actual names
+        const EMPLOYEE_NAMES = {
+            'jowblob': 'Brayden',
+            'bmarshall08': 'Brady',
+            'aagulex09': 'Angel',
+            'jerryeatsbeans': 'Jeremiah'
+        };
+
+        // Generate the hashes for all passwords on page load
         (async function initializeCredentials() {
-            const hash = await hashPassword('123');
-            VALID_CREDENTIALS['lottapressure'] = hash;
-            console.log('✓ Credentials initialized');
-            console.log('Username: lottapressure');
-            console.log('Password: 123');
-            console.log('Hash:', hash);
+            // Brayden - Jowblob - Jowblob$
+            VALID_CREDENTIALS['jowblob'] = await hashPassword('Jowblob$');
+            
+            // Brady - BMarshall08 - Taylin@12
+            VALID_CREDENTIALS['bmarshall08'] = await hashPassword('Taylin@12');
+            
+            // Angel - AAGULEX09 - Lx10293847
+            VALID_CREDENTIALS['aagulex09'] = await hashPassword('Lx10293847');
+            
+            // Jeremiah - jerryeatsbeans - Jjj1658101307$:
+            VALID_CREDENTIALS['jerryeatsbeans'] = await hashPassword('Jjj1658101307$:');
+            
+            console.log('✓ Credentials initialized for all employees');
         })();
 
         // Utility function to generate password hash (for creating new credentials)
@@ -324,6 +341,7 @@
                     // Set session storage to track login
                     sessionStorage.setItem('employeeLoggedIn', 'true');
                     sessionStorage.setItem('employeeUsername', username);
+                    sessionStorage.setItem('employeeName', EMPLOYEE_NAMES[username]);
                     
                     // Redirect to employee dashboard
                     window.location.href = 'employee-dashboard';
