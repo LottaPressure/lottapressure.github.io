@@ -963,7 +963,7 @@ body {
     background-position: center;
     background-repeat: no-repeat;
     filter: blur(5px);
-    opacity: 0.8;
+    opacity: 0.3;
     z-index: 0;
 }
 
